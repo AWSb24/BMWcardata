@@ -1,0 +1,699 @@
+{
+  "config": {
+    "step": {
+      "credentials": {
+        "title": "BMW CarData credentials",
+        "description": "Enter your BMW CarData **Client ID** and **GCID** from the MyBMW app / website.\n\n**Where to find them:**\n- Go to **My BMW** → **Personal Data** → **My Vehicles** → **CarData**\n- **Client ID:** Create or copy from \"Create Client ID\" (GUID format)\n- **GCID:** In **CARDATA STREAM** → \"Show Connection Details\" → copy the **USERNAME** value",
+        "data": {
+          "client_id": "Client ID (GUID)",
+          "gcid": "GCID (Stream username)"
+        },
+        "data_description": {
+          "client_id": "The Client ID from MyBMW CarData (e.g. xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx)",
+          "gcid": "The GCID / username from CarData stream connection details"
+        }
+      },
+      "device_flow": {
+        "title": "Complete BMW login",
+        "description": "**Verification URL:**\n\n{verification_url}\n\nPlease open the link above in your browser and sign in with your BMW account. When you see \"Login successful\", return here and click **Submit**.",
+        "data": {}
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Reauthenticate BMW CarData",
+        "description": "Reauthenticate your BMW account to refresh the connection. Click **Continue** to open a verification link in the next step."
+      },
+      "reauth_verify": {
+        "title": "Verify your BMW login",
+        "description": "**Verification URL:**\n\n{verification_url}\n\nOpen the link above in your browser and sign in with your BMW account. When you see \"Login successful\", return here and click **Submit**."
+      },
+      "reauth_success": {
+        "title": "Reauthentication successful",
+        "description": "Your BMW CarData connection has been updated. You can close this dialog."
+      }
+    },
+    "abort": {
+      "reauth_successful": "Reauthentication successful."
+    }
+  },
+  "error": {
+    "invalid_credentials": "Invalid Client ID or GCID. Check the format (GUID for Client ID).",
+    "device_flow_failed": "Could not get tokens. Make sure you completed login in the browser and try again.",
+    "cannot_connect": "Could not connect to BMW CarData. Check your credentials and try again."
+  },
+  "abort": {
+    "already_configured": "This BMW CarData account is already configured."
+  },
+  "entity": {
+    "sensor": {
+      "vehicle_vehicle_antitheftalarmsystem_alarm_activationtime": {
+        "name": "Vehicle Anti Theft Alarm System Alarm Activation Time"
+      },
+      "vehicle_vehicle_antitheftalarmsystem_alarm_armstatus": {
+        "name": "Vehicle Anti Theft Alarm System Alarm Arm Status"
+      },
+      "vehicle_vehicle_antitheftalarmsystem_alarm_ison": {
+        "name": "Vehicle Anti Theft Alarm System Alarm Is On"
+      },
+      "vehicle_electricalsystem_battery_servicedemand_recharge": {
+        "name": "Vehicle Electrical System Battery Service Demand Recharge"
+      },
+      "vehicle_electricalsystem_battery_servicedemand_replace": {
+        "name": "Vehicle Electrical System Battery Service Demand Replace"
+      },
+      "vehicle_electricalsystem_battery_stateofcharge": {
+        "name": "Vehicle Electrical System Battery State Of Charge"
+      },
+      "vehicle_electricalsystem_battery_stateofchargeplausibility": {
+        "name": "Vehicle Electrical System Battery State Of Charge Plausibility"
+      },
+      "vehicle_electricalsystem_battery_voltage": {
+        "name": "Vehicle Electrical System Battery Voltage"
+      },
+      "vehicle_electricalsystem_battery48v_stateofhealth_displayed": {
+        "name": "Vehicle Electrical System Battery48V State Of Health Displayed"
+      },
+      "vehicle_powertrain_electric_battery_charging_power": {
+        "name": "Vehicle Powertrain Electric Battery Charging Power"
+      },
+      "vehicle_drivetrain_batterymanagement_header": {
+        "name": "Vehicle Drivetrain Battery Management Header"
+      },
+      "vehicle_drivetrain_batterymanagement_maxenergy": {
+        "name": "Vehicle Drivetrain Battery Management Max Energy"
+      },
+      "vehicle_drivetrain_batterymanagement_batterysizemax": {
+        "name": "Vehicle Drivetrain Battery Management Battery Size Max"
+      },
+      "vehicle_drivetrain_electricengine_charging_status": {
+        "name": "Vehicle Drivetrain Electric Engine Charging Status"
+      },
+      "vehicle_drivetrain_electricengine_charging_level": {
+        "name": "Vehicle Drivetrain Electric Engine Charging Level"
+      },
+      "vehicle_drivetrain_electricengine_charging_timeremaining": {
+        "name": "Vehicle Drivetrain Electric Engine Charging Time Remaining"
+      },
+      "vehicle_drivetrain_electricengine_charging_timetofullycharged": {
+        "name": "Vehicle Drivetrain Electric Engine Charging Time To Fully Charged"
+      },
+      "vehicle_drivetrain_electricengine_remainingelectricrange": {
+        "name": "Vehicle Drivetrain Electric Engine Remaining Electric Range"
+      },
+      "vehicle_drivetrain_electricengine_kombiremainingelectricrange": {
+        "name": "Vehicle Drivetrain Electric Engine Kombi Remaining Electric Range"
+      },
+      "vehicle_drivetrain_electricengine_hvsmaxenergyabsolute": {
+        "name": "Vehicle Drivetrain Electric Engine Hvs Max Energy Absolute"
+      },
+      "vehicle_drivetrain_fuelsystem_level": {
+        "name": "Vehicle Drivetrain Fuel System Level"
+      },
+      "vehicle_drivetrain_fuelsystem_remainingfuel": {
+        "name": "Vehicle Drivetrain Fuel System Remaining Fuel"
+      },
+      "vehicle_drivetrain_lastremainingrange": {
+        "name": "Vehicle Drivetrain Last Remaining Range"
+      },
+      "vehicle_drivetrain_totalremainingrange": {
+        "name": "Vehicle Drivetrain Total Remaining Range"
+      },
+      "vehicle_drivetrain_avgelectricrangeconsumption": {
+        "name": "Vehicle Drivetrain Avg Electric Range Consumption"
+      },
+      "vehicle_drivetrain_engine_isactive": {
+        "name": "Vehicle Drivetrain Engine Is Active"
+      },
+      "vehicle_drivetrain_engine_isignitionon": {
+        "name": "Vehicle Drivetrain Engine Is Ignition On"
+      },
+      "vehicle_drivetrain_internalcombustionengine_engine_ect": {
+        "name": "Vehicle Drivetrain Internal Combustion Engine Ect"
+      },
+      "vehicle_cabin_door_row1_driver_isopen": {
+        "name": "Vehicle Cabin Door Row1 Driver Is Open"
+      },
+      "vehicle_cabin_door_row1_passenger_isopen": {
+        "name": "Vehicle Cabin Door Row1 Passenger Is Open"
+      },
+      "vehicle_cabin_door_row2_driver_isopen": {
+        "name": "Vehicle Cabin Door Row2 Driver Is Open"
+      },
+      "vehicle_cabin_door_row2_passenger_isopen": {
+        "name": "Vehicle Cabin Door Row2 Passenger Is Open"
+      },
+      "vehicle_cabin_door_lock_status": {
+        "name": "Vehicle Cabin Door Lock Status"
+      },
+      "vehicle_cabin_door_status": {
+        "name": "Vehicle Cabin Door Status"
+      },
+      "vehicle_cabin_infotainment_navigation_currentlocation_latitude": {
+        "name": "Vehicle Cabin Infotainment Navigation Current Location Latitude"
+      },
+      "vehicle_cabin_infotainment_navigation_currentlocation_longitude": {
+        "name": "Vehicle Cabin Infotainment Navigation Current Location Longitude"
+      },
+      "vehicle_cabin_infotainment_navigation_currentlocation_altitude": {
+        "name": "Vehicle Cabin Infotainment Navigation Current Location Altitude"
+      },
+      "vehicle_cabin_infotainment_navigation_currentlocation_heading": {
+        "name": "Vehicle Cabin Infotainment Navigation Current Location Heading"
+      },
+      "vehicle_cabin_infotainment_navigation_currentlocation_numberofsatellites": {
+        "name": "Vehicle Cabin Infotainment Navigation Current Location Number Of Satellites"
+      },
+      "vehicle_cabin_infotainment_navigation_currentlocation_fixstatus": {
+        "name": "Vehicle Cabin Infotainment Navigation Current Location Fix Status"
+      },
+      "vehicle_body_hood_isopen": {
+        "name": "Vehicle Body Hood Is Open"
+      },
+      "vehicle_body_trunk_isopen": {
+        "name": "Vehicle Body Trunk Is Open"
+      },
+      "vehicle_body_trunk_door_isopen": {
+        "name": "Vehicle Body Trunk Door Is Open"
+      },
+      "vehicle_body_lights_isrunningon": {
+        "name": "Vehicle Body Lights Is Running On"
+      },
+      "vehicle_body_chargingport_combinedstatus": {
+        "name": "Vehicle Body Charging Port Combined Status"
+      },
+      "vehicle_body_chargingport_status": {
+        "name": "Vehicle Body Charging Port Status"
+      },
+      "vehicle_ismoving": {
+        "name": "Vehicle Is Moving"
+      },
+      "vehicle_vehicle_travelleddistance": {
+        "name": "Vehicle Travelled Distance"
+      },
+      "vehicle_vehicle_avgspeed": {
+        "name": "Vehicle Avg Speed"
+      },
+      "vehicle_cabin_seat_row1_driverside_heating": {
+        "name": "Vehicle Cabin Seat Row1 Driver Side Heating"
+      },
+      "vehicle_cabin_seat_row1_passengerside_heating": {
+        "name": "Vehicle Cabin Seat Row1 Passenger Side Heating"
+      },
+      "vehicle_cabin_seat_row2_driverside_heating": {
+        "name": "Vehicle Cabin Seat Row2 Driver Side Heating"
+      },
+      "vehicle_cabin_seat_row2_passengerside_heating": {
+        "name": "Vehicle Cabin Seat Row2 Passenger Side Heating"
+      },
+      "vehicle_cabin_steeringwheel_heating": {
+        "name": "Vehicle Cabin Steering Wheel Heating"
+      },
+      "vehicle_cabin_sunroof_status": {
+        "name": "Vehicle Cabin Sunroof Status"
+      },
+      "vehicle_cabin_sunroof_overallstatus": {
+        "name": "Vehicle Cabin Sunroof Overall Status"
+      },
+      "vehicle_cabin_window_row1_driver_status": {
+        "name": "Vehicle Cabin Window Row1 Driver Status"
+      },
+      "vehicle_cabin_window_row1_passenger_status": {
+        "name": "Vehicle Cabin Window Row1 Passenger Status"
+      },
+      "vehicle_cabin_window_row2_driver_status": {
+        "name": "Vehicle Cabin Window Row2 Driver Status"
+      },
+      "vehicle_cabin_window_row2_passenger_status": {
+        "name": "Vehicle Cabin Window Row2 Passenger Status"
+      },
+      "vehicle_chassis_axle_row1_wheel_left_tire_pressure": {
+        "name": "Vehicle Chassis Axle Row1 Wheel Left Tire Pressure"
+      },
+      "vehicle_chassis_axle_row1_wheel_right_tire_pressure": {
+        "name": "Vehicle Chassis Axle Row1 Wheel Right Tire Pressure"
+      },
+      "vehicle_chassis_axle_row2_wheel_left_tire_pressure": {
+        "name": "Vehicle Chassis Axle Row2 Wheel Left Tire Pressure"
+      },
+      "vehicle_chassis_axle_row2_wheel_right_tire_pressure": {
+        "name": "Vehicle Chassis Axle Row2 Wheel Right Tire Pressure"
+      },
+      "vehicle_status_checkcontrolmessages": {
+        "name": "Vehicle Status Check Control Messages"
+      },
+      "vehicle_status_conditionbasedservices": {
+        "name": "Vehicle Status Condition Based Services"
+      },
+      "vehicle_status_servicedistance_next": {
+        "name": "Vehicle Status Service Distance Next"
+      },
+      "vehicle_status_servicetime_inspectiondatelegal": {
+        "name": "Vehicle Status Service Time Inspection Date Legal"
+      },
+      "vehicle_trip_segment_end_travelleddistance": {
+        "name": "Vehicle Trip Segment End Travelled Distance"
+      },
+      "vehicle_trip_segment_end_time": {
+        "name": "Vehicle Trip Segment End Time"
+      },
+      "vehicle_vehicle_preconditioning_activity": {
+        "name": "Vehicle Pre Conditioning Activity"
+      },
+      "vehicle_vehicle_preconditioning_remainingtime": {
+        "name": "Vehicle Pre Conditioning Remaining Time"
+      },
+      "vehicle_cabin_hvac_preconditioning_status_progress": {
+        "name": "Vehicle Cabin Hvac Preconditioning Status Progress"
+      },
+      "vehicle_cabin_hvac_preconditioning_status_remainingrunningtime": {
+        "name": "Vehicle Cabin Hvac Preconditioning Status Remaining Running Time"
+      },
+      "vehicle_cabin_climate_timers_weekdaystimer1_action": {
+        "name": "Vehicle Cabin Climate Timers Weekdays Timer1 Action"
+      },
+      "vehicle_cabin_climate_timers_weekdaystimer2_action": {
+        "name": "Vehicle Cabin Climate Timers Weekdays Timer2 Action"
+      },
+      "vehicle_drivetrain_electricengine_charging_method": {
+        "name": "Vehicle Drivetrain Electric Engine Charging Method"
+      },
+      "vehicle_drivetrain_electricengine_charging_connectorstatus": {
+        "name": "Vehicle Drivetrain Electric Engine Charging Connector Status"
+      },
+      "vehicle_drivetrain_electricengine_charging_connectiontype": {
+        "name": "Vehicle Drivetrain Electric Engine Charging Connection Type"
+      },
+      "vehicle_powertrain_tractionbattery_charging_port_anyposition_isplugged": {
+        "name": "Vehicle Powertrain Traction Battery Charging Port Any Position Is Plugged"
+      },
+      "vehicle_powertrain_tractionbattery_charging_port_frontleft_isplugged": {
+        "name": "Vehicle Powertrain Traction Battery Charging Port Front Left Is Plugged"
+      },
+      "vehicle_powertrain_tractionbattery_charging_port_frontright_isplugged": {
+        "name": "Vehicle Powertrain Traction Battery Charging Port Front Right Is Plugged"
+      },
+      "vehicle_powertrain_tractionbattery_charging_port_rearleft_isplugged": {
+        "name": "Vehicle Powertrain Traction Battery Charging Port Rear Left Is Plugged"
+      },
+      "vehicle_powertrain_tractionbattery_charging_port_rearright_isplugged": {
+        "name": "Vehicle Powertrain Traction Battery Charging Port Rear Right Is Plugged"
+      },
+      "vehicle_powertrain_tractionbattery_charging_port_anyposition_flap_isopen": {
+        "name": "Vehicle Powertrain Traction Battery Charging Port Any Position Flap Is Open"
+      },
+      "vehicle_powertrain_electric_battery_stateofcharge_target": {
+        "name": "Vehicle Powertrain Electric Battery State Of Charge Target"
+      },
+      "vehicle_powertrain_electric_battery_preconditioning_state": {
+        "name": "Vehicle Powertrain Electric Battery Preconditioning State"
+      },
+      "vehicle_powertrain_electric_range_target": {
+        "name": "Vehicle Powertrain Electric Range Target"
+      },
+      "vehicle_drivetrain_electricengine_charging_profile_mode": {
+        "name": "Vehicle Drivetrain Electric Engine Charging Profile Mode"
+      },
+      "vehicle_drivetrain_electricengine_charging_profile_preference": {
+        "name": "Vehicle Drivetrain Electric Engine Charging Profile Preference"
+      },
+      "vehicle_drivetrain_electricengine_charging_acampere": {
+        "name": "Vehicle Drivetrain Electric Engine Charging Ac Ampere"
+      },
+      "vehicle_drivetrain_electricengine_charging_acvoltage": {
+        "name": "Vehicle Drivetrain Electric Engine Charging Ac Voltage"
+      },
+      "vehicle_drivetrain_electricengine_charging_phasenumber": {
+        "name": "Vehicle Drivetrain Electric Engine Charging Phase Number"
+      },
+      "vehicle_channel_ngtp_timevehicle": {
+        "name": "Vehicle Channel Ngtp Time Vehicle"
+      },
+      "vehicle_cabin_infotainment_displayunit_distance": {
+        "name": "Vehicle Cabin Infotainment Display Unit Distance"
+      },
+      "vehicle_cabin_infotainment_hmi_distanceunit": {
+        "name": "Vehicle Cabin Infotainment Hmi Distance Unit"
+      },
+      "vehicle_cabin_infotainment_ismobilephoneconnected": {
+        "name": "Vehicle Cabin Infotainment Is Mobile Phone Connected"
+      },
+      "vehicle_sim_status": {
+        "name": "Vehicle Sim Status"
+      },
+      "vehicle_vehicle_timesetting": {
+        "name": "Vehicle Time Setting"
+      },
+      "vehicle_vehicle_avgauxpower": {
+        "name": "Vehicle Avg Aux Power"
+      },
+      "vehicle_vehicle_deepsleepmodeactive": {
+        "name": "Vehicle Deep Sleep Mode Active"
+      },
+      "vehicle_vehicle_speedrange_lowerbound": {
+        "name": "Vehicle Speed Range Lower Bound"
+      },
+      "vehicle_vehicle_speedrange_upperbound": {
+        "name": "Vehicle Speed Range Upper Bound"
+      },
+      "vehicle_vehicle_averageweeklydistancelongterm": {
+        "name": "Vehicle Average Weekly Distance Long Term"
+      },
+      "vehicle_vehicle_averageweeklydistanceshortterm": {
+        "name": "Vehicle Average Weekly Distance Short Term"
+      },
+      "vehicle_cabin_convertible_roofstatus": {
+        "name": "Vehicle Cabin Convertible Roof Status"
+      },
+      "vehicle_cabin_convertible_roofretractablestatus": {
+        "name": "Vehicle Cabin Convertible Roof Retractable Status"
+      },
+      "vehicle_body_flap_islocked": {
+        "name": "Vehicle Body Flap Is Locked"
+      },
+      "vehicle_body_flap_ispermanentlyunlocked": {
+        "name": "Vehicle Body Flap Is Permanently Unlocked"
+      },
+      "vehicle_cabin_hvac_statusairpurification": {
+        "name": "Vehicle Cabin Hvac Status Air Purification"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_defaultsettings_targettemperature": {
+        "name": "Vehicle Cabin Hvac Preconditioning Configuration Default Settings Target Temperature"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_directstartsettings_targettemperature": {
+        "name": "Vehicle Cabin Hvac Preconditioning Configuration Direct Start Settings Target Temperature"
+      },
+      "vehicle_cabin_hvac_preconditioning_status_comfortstate": {
+        "name": "Vehicle Cabin Hvac Preconditioning Status Comfort State"
+      },
+      "vehicle_cabin_hvac_preconditioning_status_reardefrostactive": {
+        "name": "Vehicle Cabin Hvac Preconditioning Status Rear Defrost Active"
+      },
+      "vehicle_vehicle_preconditioning_isremoteenginerunning": {
+        "name": "Vehicle Pre Conditioning Is Remote Engine Running"
+      },
+      "vehicle_vehicle_preconditioning_isremoteenginestartallowed": {
+        "name": "Vehicle Pre Conditioning Is Remote Engine Start Allowed"
+      },
+      "vehicle_vehicle_preconditioning_error": {
+        "name": "Vehicle Pre Conditioning Error"
+      },
+      "vehicle_cabin_door_row1_driver_position": {
+        "name": "Vehicle Cabin Door Row1 Driver Position"
+      },
+      "vehicle_cabin_door_row1_passenger_position": {
+        "name": "Vehicle Cabin Door Row1 Passenger Position"
+      },
+      "vehicle_cabin_door_row2_driver_position": {
+        "name": "Vehicle Cabin Door Row2 Driver Position"
+      },
+      "vehicle_cabin_door_row2_passenger_position": {
+        "name": "Vehicle Cabin Door Row2 Passenger Position"
+      },
+      "vehicle_cabin_infotainment_navigation_destinationset_arrivaltime": {
+        "name": "Vehicle Cabin Infotainment Navigation Destination Set Arrival Time"
+      },
+      "vehicle_cabin_infotainment_navigation_destinationset_distance": {
+        "name": "Vehicle Cabin Infotainment Navigation Destination Set Distance"
+      },
+      "vehicle_cabin_infotainment_navigation_destinationset_latitude": {
+        "name": "Vehicle Cabin Infotainment Navigation Destination Set Latitude"
+      },
+      "vehicle_cabin_infotainment_navigation_destinationset_longitude": {
+        "name": "Vehicle Cabin Infotainment Navigation Destination Set Longitude"
+      },
+      "vehicle_cabin_infotainment_navigation_pointsofinterests_available": {
+        "name": "Vehicle Cabin Infotainment Navigation Points Of Interests Available"
+      },
+      "vehicle_cabin_infotainment_navigation_pointsofinterests_max": {
+        "name": "Vehicle Cabin Infotainment Navigation Points Of Interests Max"
+      },
+      "vehicle_cabin_infotainment_navigation_remainingrange": {
+        "name": "Vehicle Cabin Infotainment Navigation Remaining Range"
+      },
+      "vehicle_learningnavigation": {
+        "name": "Vehicle Learning Navigation"
+      },
+      "vehicle_status_conditionbasedservicescount": {
+        "name": "Vehicle Status Condition Based Services Count"
+      },
+      "vehicle_status_conditionbasedservicesaveragedistanceperday": {
+        "name": "Vehicle Status Condition Based Services Average Distance Per Day"
+      },
+      "vehicle_status_servicedistance_yellow": {
+        "name": "Vehicle Status Service Distance Yellow"
+      },
+      "vehicle_status_servicetime_yellow": {
+        "name": "Vehicle Status Service Time Yellow"
+      },
+      "vehicle_status_servicetime_huandauserviceyellow": {
+        "name": "Vehicle Status Service Time H Uand Au Service Yellow"
+      },
+      "vehicle_sevice_preferredsevicepartner": {
+        "name": "Vehicle Sevice Preferred Sevice Partner"
+      },
+      "vehicle_servicedemand_defect_id": {
+        "name": "Vehicle Service Demand Defect Id"
+      },
+      "vehicle_channel_teleservice_status": {
+        "name": "Vehicle Channel Teleservice Status"
+      },
+      "vehicle_channel_teleservice_lastautomaticservicecalltime": {
+        "name": "Vehicle Channel Teleservice Last Automatic Service Call Time"
+      },
+      "vehicle_channel_teleservice_lastmanualcalltime": {
+        "name": "Vehicle Channel Teleservice Last Manual Call Time"
+      },
+      "vehicle_channel_teleservice_lastbreakdowncalltime": {
+        "name": "Vehicle Channel Teleservice Last Breakdown Call Time"
+      },
+      "vehicle_channel_teleservice_lastteleservicereporttime": {
+        "name": "Vehicle Channel Teleservice Last Teleservice Report Time"
+      },
+      "vehicle_chassis_axle_row1_wheel_left_tire_pressuretarget": {
+        "name": "Vehicle Chassis Axle Row1 Wheel Left Tire Pressure Target"
+      },
+      "vehicle_chassis_axle_row1_wheel_left_tire_temperature": {
+        "name": "Vehicle Chassis Axle Row1 Wheel Left Tire Temperature"
+      },
+      "vehicle_chassis_axle_row1_wheel_right_tire_pressuretarget": {
+        "name": "Vehicle Chassis Axle Row1 Wheel Right Tire Pressure Target"
+      },
+      "vehicle_chassis_axle_row1_wheel_right_tire_temperature": {
+        "name": "Vehicle Chassis Axle Row1 Wheel Right Tire Temperature"
+      },
+      "vehicle_chassis_axle_row2_wheel_left_tire_pressuretarget": {
+        "name": "Vehicle Chassis Axle Row2 Wheel Left Tire Pressure Target"
+      },
+      "vehicle_chassis_axle_row2_wheel_left_tire_temperature": {
+        "name": "Vehicle Chassis Axle Row2 Wheel Left Tire Temperature"
+      },
+      "vehicle_chassis_axle_row2_wheel_right_tire_pressuretarget": {
+        "name": "Vehicle Chassis Axle Row2 Wheel Right Tire Pressure Target"
+      },
+      "vehicle_chassis_axle_row2_wheel_right_tire_temperature": {
+        "name": "Vehicle Chassis Axle Row2 Wheel Right Tire Temperature"
+      },
+      "vehicle_chassis_axle_wheel_tire_diagnosis": {
+        "name": "Vehicle Chassis Axle Wheel Tire Diagnosis"
+      },
+      "vehicle_trip_segment_accumulated_drivetrain_electricengine_energyconsumptioncomfort": {
+        "name": "Vehicle Trip Segment Accumulated Drivetrain Electric Engine Energy Consumption Comfort"
+      },
+      "vehicle_trip_segment_accumulated_drivetrain_transmission_setting_fractiondriveelectric": {
+        "name": "Vehicle Trip Segment Accumulated Drivetrain Transmission Setting Fraction Drive Electric"
+      },
+      "vehicle_trip_segment_accumulated_drivetrain_transmission_setting_fractiondriveecopro": {
+        "name": "Vehicle Trip Segment Accumulated Drivetrain Transmission Setting Fraction Drive Eco Pro"
+      },
+      "vehicle_trip_segment_accumulated_drivetrain_transmission_setting_fractiondriveecoproplus": {
+        "name": "Vehicle Trip Segment Accumulated Drivetrain Transmission Setting Fraction Drive Eco Pro Plus"
+      },
+      "vehicle_trip_segment_end_drivetrain_batterymanagement_hvsoc": {
+        "name": "Vehicle Trip Segment End Drivetrain Battery Management Hv Soc"
+      },
+      "vehicle_trip_segment_accumulated_acceleration_starsaverage": {
+        "name": "Vehicle Trip Segment Accumulated Acceleration Stars Average"
+      },
+      "vehicle_trip_segment_accumulated_chassis_brake_starsaverage": {
+        "name": "Vehicle Trip Segment Accumulated Chassis Brake Stars Average"
+      },
+      "vehicle_body_trunk_islocked": {
+        "name": "Vehicle Body Trunk Is Locked"
+      },
+      "vehicle_body_trunk_left_door_isopen": {
+        "name": "Vehicle Body Trunk Left Door Is Open"
+      },
+      "vehicle_body_trunk_right_door_isopen": {
+        "name": "Vehicle Body Trunk Right Door Is Open"
+      },
+      "vehicle_body_trunk_upper_door_isopen": {
+        "name": "Vehicle Body Trunk Upper Door Is Open"
+      },
+      "vehicle_body_trunk_lower_door_isopen": {
+        "name": "Vehicle Body Trunk Lower Door Is Open"
+      },
+      "vehicle_body_trunk_window_isopen": {
+        "name": "Vehicle Body Trunk Window Is Open"
+      },
+      "vehicle_cabin_sunroof_relativeposition": {
+        "name": "Vehicle Cabin Sunroof Relative Position"
+      },
+      "vehicle_cabin_sunroof_tiltstatus": {
+        "name": "Vehicle Cabin Sunroof Tilt Status"
+      },
+      "vehicle_cabin_sunroof_shade_position": {
+        "name": "Vehicle Cabin Sunroof Shade Position"
+      },
+      "vehicle_cabin_climate_timers_overwritetimer_action": {
+        "name": "Vehicle Cabin Climate Timers Overwrite Timer Action"
+      },
+      "vehicle_cabin_climate_timers_overwritetimer_hour": {
+        "name": "Vehicle Cabin Climate Timers Overwrite Timer Hour"
+      },
+      "vehicle_cabin_climate_timers_overwritetimer_minute": {
+        "name": "Vehicle Cabin Climate Timers Overwrite Timer Minute"
+      },
+      "vehicle_cabin_climate_timers_weekdaystimer1_hour": {
+        "name": "Vehicle Cabin Climate Timers Weekdays Timer1 Hour"
+      },
+      "vehicle_cabin_climate_timers_weekdaystimer1_minute": {
+        "name": "Vehicle Cabin Climate Timers Weekdays Timer1 Minute"
+      },
+      "vehicle_cabin_climate_timers_weekdaystimer2_hour": {
+        "name": "Vehicle Cabin Climate Timers Weekdays Timer2 Hour"
+      },
+      "vehicle_cabin_climate_timers_weekdaystimer2_minute": {
+        "name": "Vehicle Cabin Climate Timers Weekdays Timer2 Minute"
+      },
+      "vehicle_body_chargingport_dcstatus": {
+        "name": "Vehicle Body Charging Port Dc Status"
+      },
+      "vehicle_body_chargingport_ishospitalityactive": {
+        "name": "Vehicle Body Charging Port Is Hospitality Active"
+      },
+      "vehicle_body_chargingport_lockedstatus": {
+        "name": "Vehicle Body Charging Port Locked Status"
+      },
+      "vehicle_body_chargingport_statuscleartext": {
+        "name": "Vehicle Body Charging Port Status Clear Text"
+      },
+      "vehicle_powertrain_tractionbattery_charging_port_anyposition_flap_isautomaticopenandcloseactive": {
+        "name": "Vehicle Powertrain Traction Battery Charging Port Any Position Flap Is Automatic Open And Close Active"
+      },
+      "vehicle_powertrain_tractionbattery_charging_port_frontleft_flap_isopen": {
+        "name": "Vehicle Powertrain Traction Battery Charging Port Front Left Flap Is Open"
+      },
+      "vehicle_powertrain_tractionbattery_charging_port_frontright_flap_isopen": {
+        "name": "Vehicle Powertrain Traction Battery Charging Port Front Right Flap Is Open"
+      },
+      "vehicle_powertrain_tractionbattery_charging_port_rearleft_flap_isopen": {
+        "name": "Vehicle Powertrain Traction Battery Charging Port Rear Left Flap Is Open"
+      },
+      "vehicle_powertrain_tractionbattery_charging_port_rearright_flap_isopen": {
+        "name": "Vehicle Powertrain Traction Battery Charging Port Rear Right Flap Is Open"
+      },
+      "vehicle_powertrain_tractionbattery_charging_port_frontmiddle_isplugged": {
+        "name": "Vehicle Powertrain Traction Battery Charging Port Front Middle Is Plugged"
+      },
+      "vehicle_powertrain_tractionbattery_charging_port_rearmiddle_isplugged": {
+        "name": "Vehicle Powertrain Traction Battery Charging Port Rear Middle Is Plugged"
+      },
+      "vehicle_powertrain_electric_range_displaycontrol": {
+        "name": "Vehicle Powertrain Electric Range Display Control"
+      },
+      "vehicle_powertrain_electric_chargingduration_displaycontrol": {
+        "name": "Vehicle Powertrain Electric Charging Duration Display Control"
+      },
+      "vehicle_powertrain_electric_departuretime_displaycontrol": {
+        "name": "Vehicle Powertrain Electric Departure Time Display Control"
+      },
+      "vehicle_drivetrain_electricengine_charging_profile_timertype": {
+        "name": "Vehicle Drivetrain Electric Engine Charging Profile Timer Type"
+      },
+      "vehicle_drivetrain_electricengine_charging_profile_climatizationactive": {
+        "name": "Vehicle Drivetrain Electric Engine Charging Profile Climatization Active"
+      },
+      "vehicle_drivetrain_electricengine_charging_smeenergydeltafullycharged": {
+        "name": "Vehicle Drivetrain Electric Engine Charging Sme Energy Delta Fully Charged"
+      },
+      "vehicle_drivetrain_electricengine_charging_reasonchargingend": {
+        "name": "Vehicle Drivetrain Electric Engine Charging Reason Charging End"
+      },
+      "vehicle_drivetrain_electricengine_charging_hvpmfinishreason": {
+        "name": "Vehicle Drivetrain Electric Engine Charging Hvpm Finish Reason"
+      },
+      "vehicle_drivetrain_electricengine_charging_hvstatus": {
+        "name": "Vehicle Drivetrain Electric Engine Charging Hv Status"
+      },
+      "vehicle_drivetrain_electricengine_charging_routeoptimizedchargingstatus": {
+        "name": "Vehicle Drivetrain Electric Engine Charging Route Optimized Charging Status"
+      },
+      "vehicle_cabin_seat_row1_driverside_cooling": {
+        "name": "Vehicle Cabin Seat Row1 Driver Side Cooling"
+      },
+      "vehicle_cabin_seat_row1_passengerside_cooling": {
+        "name": "Vehicle Cabin Seat Row1 Passenger Side Cooling"
+      },
+      "vehicle_cabin_seat_row2_driverside_cooling": {
+        "name": "Vehicle Cabin Seat Row2 Driver Side Cooling"
+      },
+      "vehicle_cabin_seat_row2_passengerside_cooling": {
+        "name": "Vehicle Cabin Seat Row2 Passenger Side Cooling"
+      },
+      "vehicle_cabin_seat_row3_driverside_cooling": {
+        "name": "Vehicle Cabin Seat Row3 Driver Side Cooling"
+      },
+      "vehicle_cabin_seat_row3_driverside_heating": {
+        "name": "Vehicle Cabin Seat Row3 Driver Side Heating"
+      },
+      "vehicle_cabin_seat_row3_passengerside_cooling": {
+        "name": "Vehicle Cabin Seat Row3 Passenger Side Cooling"
+      },
+      "vehicle_cabin_seat_row3_passengerside_heating": {
+        "name": "Vehicle Cabin Seat Row3 Passenger Side Heating"
+      },
+      "vehicle_drivetrain_fuelsystem_consumptionoverlifetime_overall_fuel": {
+        "name": "Vehicle Drivetrain Fuel System Consumption Over Life Time Overall Fuel"
+      },
+      "vehicle_drivetrain_fuelsystem_consumptionoverlifetime_overall_referencedistance": {
+        "name": "Vehicle Drivetrain Fuel System Consumption Over Life Time Overall Reference Distance"
+      },
+      "vehicle_privacysettings_datacollection_regulations_obfcm": {
+        "name": "Vehicle Privacy Settings Data Collection Regulations Obfcm"
+      },
+      "vehicle_vehicleidentification_connecteddrivecontractlist": {
+        "name": "Vehicle Identification Connected Drive Contract List"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_isremoteenginestartdisclaimer": {
+        "name": "Vehicle Cabin Hvac Preconditioning Configuration Is Remote Engine Start Disclaimer"
+      },
+      "status": {
+        "name": "Status",
+        "state": {
+          "Connected": "Connected",
+          "Disconnected": "Disconnected"
+        }
+      },
+      "vin": {
+        "name": "VIN"
+      }
+    },
+    "binary_sensor": {
+      "cardata_stream": {
+        "name": "CarData stream",
+        "state": {
+          "on": "Connected",
+          "off": "Disconnected"
+        }
+      }
+    },
+    "device_tracker": {
+      "vehicle": {
+        "name": "Vehicle"
+      }
+    }
+  }
+}
