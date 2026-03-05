@@ -14,12 +14,15 @@ from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.dispatcher import async_dispatcher_connect
 from homeassistant.helpers.translation import async_get_translations
+from homeassistant.helpers.device_registry import async_get as async_get_device_registry
 
-from .const import DOMAIN, SIGNAL_CARDATA_UPDATE, SIGNAL_CONNECTION_CHANGED
-from .descriptors import KNOWN_CARDATA_KEYS
-
-# Normalized set so we skip VIN-specific entities when the key matches a known key (any casing)
-KNOWN_CARDATA_KEYS_LOWER = {k.lower() for k in KNOWN_CARDATA_KEYS}
+from .const import (
+    DOMAIN,
+    CONF_GCID,
+    get_device_name,
+    SIGNAL_CARDATA_UPDATE,
+    SIGNAL_CONNECTION_CHANGED,
+)
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -97,28 +100,29 @@ async def async_setup_entry(
     vin_sensor = BMWCarDataVINSensor(hass, config_entry, entry_data)
     async_add_entities([vin_sensor])
 
-    # Pre-create entities for all known CarData descriptors (200+ parameters)
-    # dict.fromkeys preserves order, dedupes (descriptors may have duplicates)
-    for key in dict.fromkeys(KNOWN_CARDATA_KEYS):
-        entity = BMWCarDataSensor(
-            hass,
-            config_entry,
-            entry_data,
-            vin="__all__",  # Look up value from any VIN
-            key=key,
-        )
-        async_add_entities([entity])
+    # CarData sensors are added on demand when MQTT pushes data (no pre-creation of 200+ entities).
+    # All entities use the same device; device name shows actual VIN/GCID when available.
+    # Existing set avoids duplicate (vin, key) in one run; HA deduplicates by unique_id.
+    existing: set[tuple[str, str]] = set()
+    gcid = (config_entry.data.get(CONF_GCID) or "").strip()
 
-    existing: set[tuple[str, str]] = {( "__all__", k.lower()) for k in KNOWN_CARDATA_KEYS}
+    async def _update_device_name(vin: str | None) -> None:
+        """Update the single device name to show actual VIN / GCID."""
+        try:
+            dev_reg = async_get_device_registry(hass)
+            device = dev_reg.async_get_device(identifiers={(DOMAIN, config_entry.entry_id)})
+            if device:
+                dev_reg.async_update_device(device.id, name=get_device_name(gcid, vin))
+        except Exception:
+            pass
 
     def _add_entities_for_vin(vin: str) -> list[BMWCarDataSensor]:
         entities: list[BMWCarDataSensor] = []
         for key in store.get_vin_keys(vin):
-            if key in KNOWN_CARDATA_KEYS_LOWER:
+            key_lower = key.lower()
+            if (vin, key_lower) in existing:
                 continue
-            if (vin, key) in existing:
-                continue
-            existing.add((vin, key))
+            existing.add((vin, key_lower))
             entities.append(
                 BMWCarDataSensor(
                     hass,
@@ -135,6 +139,9 @@ async def async_setup_entry(
         new_entities = _add_entities_for_vin(vin)
         if new_entities:
             async_add_entities(new_entities)
+    # Set initial device name (may have VIN if store was populated before)
+    first_vin = store.all_vins()[0] if store.all_vins() else None
+    await _update_device_name(first_vin)
 
     @callback
     def _on_cardata_update(entry_id: str, vin: str) -> None:
@@ -143,6 +150,8 @@ async def async_setup_entry(
         new_entities = _add_entities_for_vin(vin)
         if new_entities:
             async_add_entities(new_entities)
+            # Update device name to include VIN when first data for this VIN arrives
+            hass.async_create_task(_update_device_name(vin))
 
     config_entry.async_on_unload(
         async_dispatcher_connect(
@@ -174,14 +183,14 @@ class BMWCarDataSensor(SensorEntity):
         self._attr_unique_id = f"{config_entry.entry_id}_cardata_{key.lower()}" if vin == "__all__" else f"{config_entry.entry_id}_{vin}_{key.lower()}"
         self._attr_translation_key = key.lower()
         self._attr_name = _key_to_display_name(key)  # fallback if translation missing
+        # Single device for all CarData entities (name shows actual VIN / GCID)
+        gcid = (config_entry.data.get(CONF_GCID) or "").strip()
+        device_name = get_device_name(gcid, vin if (vin and vin != "__all__") else None)
         self._attr_device_info = {
             "identifiers": {(DOMAIN, config_entry.entry_id)},
-            "name": config_entry.title or "BMW CarData",
+            "name": device_name,
             "manufacturer": "BMW",
         }
-        if vin and vin != "__all__" and len(vin) >= 6:
-            self._attr_device_info["identifiers"] = {(DOMAIN, f"{config_entry.entry_id}_{vin}")}
-            self._attr_device_info["name"] = f"BMW {vin[-6:]}"
         self._attr_device_class = KEY_DEVICE_CLASS_NORMALIZED.get(key.lower())
         self._attr_native_unit_of_measurement = None
         self._attr_state_class = KEY_STATE_CLASS_NORMALIZED.get(key.lower())
@@ -252,9 +261,12 @@ class BMWCarDataStatusSensor(SensorEntity):
         self._config_entry = config_entry
         self._entry_data = entry_data
         self._attr_unique_id = f"{config_entry.entry_id}_status"
+        gcid = (config_entry.data.get(CONF_GCID) or "").strip()
+        store = self._entry_data.get("store")
+        vin = store.all_vins()[0] if (store and store.all_vins()) else None
         self._attr_device_info = {
             "identifiers": {(DOMAIN, config_entry.entry_id)},
-            "name": config_entry.title or "BMW CarData",
+            "name": get_device_name(gcid, vin),
             "manufacturer": "BMW",
         }
         self._attr_native_value = self._get_connection_state()
@@ -314,9 +326,11 @@ class BMWCarDataVINSensor(SensorEntity):
         self._entry_data = entry_data
         self._store = entry_data["store"]
         self._attr_unique_id = f"{config_entry.entry_id}_vin"
+        gcid = (config_entry.data.get(CONF_GCID) or "").strip()
+        vin = self._store.all_vins()[0] if self._store.all_vins() else None
         self._attr_device_info = {
             "identifiers": {(DOMAIN, config_entry.entry_id)},
-            "name": config_entry.title or "BMW CarData",
+            "name": get_device_name(gcid, vin),
             "manufacturer": "BMW",
         }
         self._attr_native_value = self._get_vin()

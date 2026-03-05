@@ -26,6 +26,14 @@ from .const import (
 
 _LOGGER = logging.getLogger(__name__)
 
+# Standard VIN length; topic segment used as VIN only when length matches to avoid short IDs (e.g. B35835) creating extra devices
+_VIN_LENGTH = 17
+
+
+def _looks_like_vin(value: str) -> bool:
+    """True if value could be a VIN (17 alphanumeric chars)."""
+    return len(value) == _VIN_LENGTH and value.isalnum()
+
 
 def _sanitize_key(key: str) -> str:
     """Sanitize a data key for use as entity id (dots -> underscores)."""
@@ -125,11 +133,12 @@ class BMWCarDataClient:
         try:
             topic = msg.topic
             payload = msg.payload.decode("utf-8") if msg.payload else "{}"
+            _LOGGER.debug("MQTT message: topic=%s payload=%s", topic, payload)
             data = json.loads(payload)
             vin = data.get("vin") or ""
             if not vin and "/" in topic:
                 parts = topic.split("/")
-                if len(parts) >= 2:
+                if len(parts) >= 2 and _looks_like_vin(parts[1]):
                     vin = parts[1]
             event_name = ""
             if "/" in topic:

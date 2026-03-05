@@ -38,3 +38,16 @@ CONNECTION_STATUS = "connection_status"
 # Dispatcher signals (used by __init__, sensor, binary_sensor)
 SIGNAL_CARDATA_UPDATE = "bmw_cardata_update"
 SIGNAL_CONNECTION_CHANGED = "bmw_cardata_connection_changed"
+
+
+def get_device_name(gcid: str, vin: str | None) -> str:
+    """Build device name from actual VIN and GCID (single device for all entities)."""
+    gcid = (gcid or "").strip()
+    vin = (vin or "").strip()
+    if vin and gcid:
+        return f"BMW {vin} / {gcid}"
+    if vin:
+        return f"BMW {vin}"
+    if gcid:
+        return f"BMW {gcid}"
+    return "BMW CarData"

@@ -15,7 +15,7 @@ from homeassistant.helpers.dispatcher import async_dispatcher_connect
 from homeassistant.helpers.translation import async_get_translations
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 
-from .const import DOMAIN, SIGNAL_CONNECTION_CHANGED
+from .const import DOMAIN, CONF_GCID, get_device_name, SIGNAL_CONNECTION_CHANGED
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -79,9 +79,12 @@ class BMWCarDataConnectionSensor(BinarySensorEntity):
         self._coordinator = coordinator
         self._config_entry = config_entry
         self._attr_unique_id = f"{config_entry.entry_id}_connection"
+        gcid = (config_entry.data.get(CONF_GCID) or "").strip()
+        store = coordinator._entry_data.get("store") if coordinator._entry_data else None
+        vin = store.all_vins()[0] if (store and store.all_vins()) else None
         self._attr_device_info = {
             "identifiers": {(DOMAIN, config_entry.entry_id)},
-            "name": config_entry.title or "BMW CarData",
+            "name": get_device_name(gcid, vin),
             "manufacturer": "BMW",
         }
 

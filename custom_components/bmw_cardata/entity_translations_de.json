@@ -265,11 +265,17 @@
       "vehicle_powertrain_electric_range_target": {
         "name": "Fahrzeug Antriebsstrang Elektro Reichweite Ziel"
       },
+      "vehicle_drivetrain_electricengine_charging_chargingmode": {
+        "name": "Fahrzeug Antrieb Elektro Motor Laden Lademodus"
+      },
       "vehicle_drivetrain_electricengine_charging_profile_mode": {
         "name": "Fahrzeug Antrieb Elektro Motor Laden Profil Modus"
       },
       "vehicle_drivetrain_electricengine_charging_profile_preference": {
         "name": "Fahrzeug Antrieb Elektro Motor Laden Profil Einstellung"
+      },
+      "vehicle_drivetrain_electricengine_charging_profile_isrcpconfigcomplete": {
+        "name": "Fahrzeug Antrieb Elektro Motor Laden Profil Rcp Konfiguration vollständig"
       },
       "vehicle_drivetrain_electricengine_charging_acampere": {
         "name": "Fahrzeug Antrieb Elektro Motor Laden Ac Ampere"
@@ -621,6 +627,237 @@
       },
       "vehicle_cabin_hvac_preconditioning_configuration_isremoteenginestartdisclaimer": {
         "name": "Fahrzeug Innenraum Klima Vorklimatisierung Konfiguration Is Fern Motor Start Hinweis"
+      },
+      "vehicle_body_chargingport_isosessionid": {
+        "name": "Fahrzeug Ladeanschluss ISO Sitzungs-ID"
+      },
+      "vehicle_body_chargingport_plugeventid": {
+        "name": "Fahrzeug Ladeanschluss Stecker Ereignis-ID"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_defaultsettings_seat_row1_driverside_cooling": {
+        "name": "Fahrzeug Klima Vorklimatisierung Standard Sitz Reihe1 Fahrer Kühlung"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_defaultsettings_seat_row1_driverside_heating": {
+        "name": "Fahrzeug Klima Vorklimatisierung Standard Sitz Reihe1 Fahrer Heizung"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_defaultsettings_seat_row1_passengerside_cooling": {
+        "name": "Fahrzeug Klima Vorklimatisierung Standard Sitz Reihe1 Beifahrer Kühlung"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_defaultsettings_seat_row1_passengerside_heating": {
+        "name": "Fahrzeug Klima Vorklimatisierung Standard Sitz Reihe1 Beifahrer Heizung"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_defaultsettings_seat_row2_driverside_cooling": {
+        "name": "Fahrzeug Klima Vorklimatisierung Standard Sitz Reihe2 Fahrer Kühlung"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_defaultsettings_seat_row2_driverside_heating": {
+        "name": "Fahrzeug Klima Vorklimatisierung Standard Sitz Reihe2 Fahrer Heizung"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_defaultsettings_seat_row2_passengerside_cooling": {
+        "name": "Fahrzeug Klima Vorklimatisierung Standard Sitz Reihe2 Beifahrer Kühlung"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_defaultsettings_seat_row2_passengerside_heating": {
+        "name": "Fahrzeug Klima Vorklimatisierung Standard Sitz Reihe2 Beifahrer Heizung"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_defaultsettings_seat_row3_driverside_cooling": {
+        "name": "Fahrzeug Klima Vorklimatisierung Standard Sitz Reihe3 Fahrer Kühlung"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_defaultsettings_seat_row3_driverside_heating": {
+        "name": "Fahrzeug Klima Vorklimatisierung Standard Sitz Reihe3 Fahrer Heizung"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_defaultsettings_seat_row3_passengerside_cooling": {
+        "name": "Fahrzeug Klima Vorklimatisierung Standard Sitz Reihe3 Beifahrer Kühlung"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_defaultsettings_seat_row3_passengerside_heating": {
+        "name": "Fahrzeug Klima Vorklimatisierung Standard Sitz Reihe3 Beifahrer Heizung"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_defaultsettings_steeringwheel_heating": {
+        "name": "Fahrzeug Klima Vorklimatisierung Standard Lenkrad Heizung"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_directstartsettings_seat_row1_driverside_cooling": {
+        "name": "Fahrzeug Klima Direct Start Sitz Reihe1 Fahrer Kühlung"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_directstartsettings_seat_row1_driverside_heating": {
+        "name": "Fahrzeug Klima Direct Start Sitz Reihe1 Fahrer Heizung"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_directstartsettings_seat_row1_passengerside_cooling": {
+        "name": "Fahrzeug Klima Direct Start Sitz Reihe1 Beifahrer Kühlung"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_directstartsettings_seat_row1_passengerside_heating": {
+        "name": "Fahrzeug Klima Direct Start Sitz Reihe1 Beifahrer Heizung"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_directstartsettings_seat_row2_driverside_cooling": {
+        "name": "Fahrzeug Klima Direct Start Sitz Reihe2 Fahrer Kühlung"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_directstartsettings_seat_row2_driverside_heating": {
+        "name": "Fahrzeug Klima Direct Start Sitz Reihe2 Fahrer Heizung"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_directstartsettings_seat_row2_passengerside_cooling": {
+        "name": "Fahrzeug Klima Direct Start Sitz Reihe2 Beifahrer Kühlung"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_directstartsettings_seat_row2_passengerside_heating": {
+        "name": "Fahrzeug Klima Direct Start Sitz Reihe2 Beifahrer Heizung"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_directstartsettings_seat_row3_driverside_cooling": {
+        "name": "Fahrzeug Klima Direct Start Sitz Reihe3 Fahrer Kühlung"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_directstartsettings_seat_row3_driverside_heating": {
+        "name": "Fahrzeug Klima Direct Start Sitz Reihe3 Fahrer Heizung"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_directstartsettings_seat_row3_passengerside_cooling": {
+        "name": "Fahrzeug Klima Direct Start Sitz Reihe3 Beifahrer Kühlung"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_directstartsettings_seat_row3_passengerside_heating": {
+        "name": "Fahrzeug Klima Direct Start Sitz Reihe3 Beifahrer Heizung"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_directstartsettings_steeringwheel_heating": {
+        "name": "Fahrzeug Klima Direct Start Lenkrad Heizung"
+      },
+      "vehicle_cabin_hvac_preconditioning_status_isexteriormirrorheatingactive": {
+        "name": "Fahrzeug Klima Vorklimatisierung Außenspiegel Heizung aktiv"
+      },
+      "vehicle_channel_ista_obfcm_lasttransmissionstatus": {
+        "name": "Fahrzeug Kanal ISTA OBFCM Letzter Übertragungsstatus"
+      },
+      "vehicle_drivetrain_electricengine_charging_acrestriction_factor": {
+        "name": "Fahrzeug Antrieb Elektromotor Laden AC Drosselung Faktor"
+      },
+      "vehicle_drivetrain_electricengine_charging_authentication_status": {
+        "name": "Fahrzeug Antrieb Elektromotor Laden Authentifizierung Status"
+      },
+      "vehicle_drivetrain_electricengine_charging_consumptionoverlifetime_engineoff_gridenergy": {
+        "name": "Fahrzeug Antrieb Elektromotor Laden Verbrauch Motor aus Netzenergie"
+      },
+      "vehicle_drivetrain_electricengine_charging_consumptionoverlifetime_engineoff_referencedistance": {
+        "name": "Fahrzeug Antrieb Elektromotor Laden Verbrauch Motor aus Referenzstrecke"
+      },
+      "vehicle_drivetrain_electricengine_charging_consumptionoverlifetime_engineon_gridenergy": {
+        "name": "Fahrzeug Antrieb Elektromotor Laden Verbrauch Motor an Netzenergie"
+      },
+      "vehicle_drivetrain_electricengine_charging_consumptionoverlifetime_engineon_referencedistance": {
+        "name": "Fahrzeug Antrieb Elektromotor Laden Verbrauch Motor an Referenzstrecke"
+      },
+      "vehicle_drivetrain_electricengine_charging_consumptionoverlifetime_overall_gridenergy": {
+        "name": "Fahrzeug Antrieb Elektromotor Laden Verbrauch Gesamt Netzenergie"
+      },
+      "vehicle_drivetrain_electricengine_charging_consumptionoverlifetime_overall_referencedistance": {
+        "name": "Fahrzeug Antrieb Elektromotor Laden Verbrauch Gesamt Referenzstrecke"
+      },
+      "vehicle_drivetrain_electricengine_charging_isimmediatechargingsystemreason": {
+        "name": "Fahrzeug Antrieb Elektromotor Laden Sofortlade Grund"
+      },
+      "vehicle_drivetrain_electricengine_charging_lastchargingreason": {
+        "name": "Fahrzeug Antrieb Elektromotor Laden Letzter Ladegrund"
+      },
+      "vehicle_drivetrain_electricengine_charging_lastchargingresult": {
+        "name": "Fahrzeug Antrieb Elektromotor Laden Letztes Ladeergebnis"
+      },
+      "vehicle_drivetrain_electricengine_charging_modedeviation": {
+        "name": "Fahrzeug Antrieb Elektromotor Laden Modus Abweichung"
+      },
+      "vehicle_drivetrain_electricengine_charging_profile_settings_bidirectionalcharging_departuretimerelevant": {
+        "name": "Fahrzeug Antrieb Elektromotor Laden Profil Bidirektional Abfahrt relevant"
+      },
+      "vehicle_drivetrain_electricengine_charging_profile_settings_bidirectionalcharging_dischargeallowed": {
+        "name": "Fahrzeug Antrieb Elektromotor Laden Profil Bidirektional Entladung erlaubt"
+      },
+      "vehicle_drivetrain_electricengine_charging_windowselection": {
+        "name": "Fahrzeug Antrieb Elektromotor Laden Fenster Auswahl"
+      },
+      "vehicle_drivetrain_fuelsystem_consumptionoverlifetime_inchargedepleting_fuel": {
+        "name": "Fahrzeug Antrieb Kraftstoff Verbrauch Ladedepletion Kraftstoff"
+      },
+      "vehicle_drivetrain_fuelsystem_consumptionoverlifetime_inchargedepleting_referencedistanceengineoff": {
+        "name": "Fahrzeug Antrieb Kraftstoff Verbrauch Ladedepletion Referenzstrecke Motor aus"
+      },
+      "vehicle_drivetrain_fuelsystem_consumptionoverlifetime_inchargedepleting_referencedistanceengineon": {
+        "name": "Fahrzeug Antrieb Kraftstoff Verbrauch Ladedepletion Referenzstrecke Motor an"
+      },
+      "vehicle_drivetrain_fuelsystem_consumptionoverlifetime_inchargeincreasing_fuel": {
+        "name": "Fahrzeug Antrieb Kraftstoff Verbrauch Ladesteigerung Kraftstoff"
+      },
+      "vehicle_drivetrain_fuelsystem_consumptionoverlifetime_inchargeincreasing_referencedistance": {
+        "name": "Fahrzeug Antrieb Kraftstoff Verbrauch Ladesteigerung Referenzstrecke"
+      },
+      "vehicle_electroniccontrolunit_diagnostictroublecodes_raw": {
+        "name": "Fahrzeug Steuergerät Diagnose Fehlercodes Rohdaten"
+      },
+      "vehicle_extras_optionalequipment_code": {
+        "name": "Fahrzeug Extras Sonderausstattung Code"
+      },
+      "vehicle_look_image": {
+        "name": "Fahrzeug Aussehen Bild"
+      },
+      "vehicle_powertrain_electric_battery_bidirectionalcharging_availability": {
+        "name": "Fahrzeug Antriebsstrang Batterie Bidirektionales Laden Verfügbarkeit"
+      },
+      "vehicle_powertrain_electric_battery_charging_authenticationstatus": {
+        "name": "Fahrzeug Antriebsstrang Batterie Laden Authentifizierung Status"
+      },
+      "vehicle_powertrain_electric_battery_charging_batterycarepersisted_isactive": {
+        "name": "Fahrzeug Antriebsstrang Batterie Laden Batteriepflege aktiv"
+      },
+      "vehicle_powertrain_electric_battery_charging_batterycarepersisted_ispreservingchargingmode": {
+        "name": "Fahrzeug Antriebsstrang Batterie Laden Batteriepflege Schonmodus"
+      },
+      "vehicle_powertrain_electric_battery_charging_batterycarepersisted_isreducedtargetsoe": {
+        "name": "Fahrzeug Antriebsstrang Batterie Laden Batteriepflege Reduziertes Ladeziel"
+      },
+      "vehicle_powertrain_electric_battery_charging_cablecheckvoltage": {
+        "name": "Fahrzeug Antriebsstrang Batterie Laden Kabelprüfung Spannung"
+      },
+      "vehicle_powertrain_electric_battery_charging_dcchargingmodeactive": {
+        "name": "Fahrzeug Antriebsstrang Batterie Laden DC Lademodus aktiv"
+      },
+      "vehicle_powertrain_electric_battery_charging_history_sessionslist": {
+        "name": "Fahrzeug Antriebsstrang Batterie Laden Verlauf Sitzungsliste"
+      },
+      "vehicle_powertrain_electric_battery_charging_settingslist": {
+        "name": "Fahrzeug Antriebsstrang Batterie Laden Einstellungsliste"
+      },
+      "vehicle_powertrain_electric_battery_preconditioning_automaticmode_statusfeedback": {
+        "name": "Fahrzeug Antriebsstrang Batterie Vorkonditionierung Automatik Status"
+      },
+      "vehicle_powertrain_electric_battery_preconditioning_manualmode_statusfeedback": {
+        "name": "Fahrzeug Antriebsstrang Batterie Vorkonditionierung Manuell Status"
+      },
+      "vehicle_powertrain_electric_battery_stateofcharge_targetmin": {
+        "name": "Fahrzeug Antriebsstrang Batterie Ladezustand Ziel Minimum"
+      },
+      "vehicle_powertrain_electric_battery_stateofcharge_targetsocforprofessionalmode": {
+        "name": "Fahrzeug Antriebsstrang Batterie Ladezustand Ziel Profi-Modus"
+      },
+      "vehicle_powertrain_electric_battery_stateofhealth_displayed": {
+        "name": "Fahrzeug Antriebsstrang Batterie Gesundheitszustand angezeigt"
+      },
+      "vehicle_powertrain_tractionbattery_charging_port_frontleft_flap_isautomaticopenandcloseactive": {
+        "name": "Fahrzeug Antriebsstrang Traktionsbatterie Ladeklappe vorn links automatisch"
+      },
+      "vehicle_powertrain_tractionbattery_charging_port_frontmiddle_flap_isautomaticopenandcloseactive": {
+        "name": "Fahrzeug Antriebsstrang Traktionsbatterie Ladeklappe vorn Mitte automatisch"
+      },
+      "vehicle_powertrain_tractionbattery_charging_port_frontmiddle_flap_isopen": {
+        "name": "Fahrzeug Antriebsstrang Traktionsbatterie Ladeklappe vorn Mitte offen"
+      },
+      "vehicle_powertrain_tractionbattery_charging_port_frontright_flap_isautomaticopenandcloseactive": {
+        "name": "Fahrzeug Antriebsstrang Traktionsbatterie Ladeklappe vorn rechts automatisch"
+      },
+      "vehicle_powertrain_tractionbattery_charging_port_rearleft_flap_isautomaticopenandcloseactive": {
+        "name": "Fahrzeug Antriebsstrang Traktionsbatterie Ladeklappe hinten links automatisch"
+      },
+      "vehicle_powertrain_tractionbattery_charging_port_rearmiddle_flap_isautomaticopenandcloseactive": {
+        "name": "Fahrzeug Antriebsstrang Traktionsbatterie Ladeklappe hinten Mitte automatisch"
+      },
+      "vehicle_powertrain_tractionbattery_charging_port_rearmiddle_flap_isopen": {
+        "name": "Fahrzeug Antriebsstrang Traktionsbatterie Ladeklappe hinten Mitte offen"
+      },
+      "vehicle_powertrain_tractionbattery_charging_port_rearright_flap_isautomaticopenandcloseactive": {
+        "name": "Fahrzeug Antriebsstrang Traktionsbatterie Ladeklappe hinten rechts automatisch"
+      },
+      "vehicle_trip_segment_accumulated_drivetrain_electricengine_recuperationtotal": {
+        "name": "Fahrzeug Fahrt Abschnitt Antrieb Elektromotor Rekuperation gesamt"
+      },
+      "vehicle_vehicleidentification_basicvehicledata": {
+        "name": "Fahrzeug Fahrzeug Identifikation Basisdaten"
       }
     }
   }

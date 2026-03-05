@@ -313,11 +313,17 @@
       "vehicle_powertrain_electric_range_target": {
         "name": "Vehicle Powertrain Electric Range Target"
       },
+      "vehicle_drivetrain_electricengine_charging_chargingmode": {
+        "name": "Vehicle Drivetrain Electric Engine Charging Charging Mode"
+      },
       "vehicle_drivetrain_electricengine_charging_profile_mode": {
         "name": "Vehicle Drivetrain Electric Engine Charging Profile Mode"
       },
       "vehicle_drivetrain_electricengine_charging_profile_preference": {
         "name": "Vehicle Drivetrain Electric Engine Charging Profile Preference"
+      },
+      "vehicle_drivetrain_electricengine_charging_profile_isrcpconfigcomplete": {
+        "name": "Vehicle Drivetrain Electric Engine Charging Profile Is Rcp Config Complete"
       },
       "vehicle_drivetrain_electricengine_charging_acampere": {
         "name": "Vehicle Drivetrain Electric Engine Charging Ac Ampere"
@@ -669,6 +675,237 @@
       },
       "vehicle_cabin_hvac_preconditioning_configuration_isremoteenginestartdisclaimer": {
         "name": "Vehicle Cabin Hvac Preconditioning Configuration Is Remote Engine Start Disclaimer"
+      },
+      "vehicle_body_chargingport_isosessionid": {
+        "name": "Vehicle Body Charging Port Iso Session Id"
+      },
+      "vehicle_body_chargingport_plugeventid": {
+        "name": "Vehicle Body Charging Port Plug Event Id"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_defaultsettings_seat_row1_driverside_cooling": {
+        "name": "Vehicle Cabin Hvac Preconditioning Default Settings Seat Row1 Driver Side Cooling"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_defaultsettings_seat_row1_driverside_heating": {
+        "name": "Vehicle Cabin Hvac Preconditioning Default Settings Seat Row1 Driver Side Heating"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_defaultsettings_seat_row1_passengerside_cooling": {
+        "name": "Vehicle Cabin Hvac Preconditioning Default Settings Seat Row1 Passenger Side Cooling"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_defaultsettings_seat_row1_passengerside_heating": {
+        "name": "Vehicle Cabin Hvac Preconditioning Default Settings Seat Row1 Passenger Side Heating"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_defaultsettings_seat_row2_driverside_cooling": {
+        "name": "Vehicle Cabin Hvac Preconditioning Default Settings Seat Row2 Driver Side Cooling"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_defaultsettings_seat_row2_driverside_heating": {
+        "name": "Vehicle Cabin Hvac Preconditioning Default Settings Seat Row2 Driver Side Heating"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_defaultsettings_seat_row2_passengerside_cooling": {
+        "name": "Vehicle Cabin Hvac Preconditioning Default Settings Seat Row2 Passenger Side Cooling"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_defaultsettings_seat_row2_passengerside_heating": {
+        "name": "Vehicle Cabin Hvac Preconditioning Default Settings Seat Row2 Passenger Side Heating"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_defaultsettings_seat_row3_driverside_cooling": {
+        "name": "Vehicle Cabin Hvac Preconditioning Default Settings Seat Row3 Driver Side Cooling"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_defaultsettings_seat_row3_driverside_heating": {
+        "name": "Vehicle Cabin Hvac Preconditioning Default Settings Seat Row3 Driver Side Heating"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_defaultsettings_seat_row3_passengerside_cooling": {
+        "name": "Vehicle Cabin Hvac Preconditioning Default Settings Seat Row3 Passenger Side Cooling"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_defaultsettings_seat_row3_passengerside_heating": {
+        "name": "Vehicle Cabin Hvac Preconditioning Default Settings Seat Row3 Passenger Side Heating"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_defaultsettings_steeringwheel_heating": {
+        "name": "Vehicle Cabin Hvac Preconditioning Default Settings Steering Wheel Heating"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_directstartsettings_seat_row1_driverside_cooling": {
+        "name": "Vehicle Cabin Hvac Preconditioning Direct Start Settings Seat Row1 Driver Side Cooling"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_directstartsettings_seat_row1_driverside_heating": {
+        "name": "Vehicle Cabin Hvac Preconditioning Direct Start Settings Seat Row1 Driver Side Heating"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_directstartsettings_seat_row1_passengerside_cooling": {
+        "name": "Vehicle Cabin Hvac Preconditioning Direct Start Settings Seat Row1 Passenger Side Cooling"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_directstartsettings_seat_row1_passengerside_heating": {
+        "name": "Vehicle Cabin Hvac Preconditioning Direct Start Settings Seat Row1 Passenger Side Heating"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_directstartsettings_seat_row2_driverside_cooling": {
+        "name": "Vehicle Cabin Hvac Preconditioning Direct Start Settings Seat Row2 Driver Side Cooling"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_directstartsettings_seat_row2_driverside_heating": {
+        "name": "Vehicle Cabin Hvac Preconditioning Direct Start Settings Seat Row2 Driver Side Heating"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_directstartsettings_seat_row2_passengerside_cooling": {
+        "name": "Vehicle Cabin Hvac Preconditioning Direct Start Settings Seat Row2 Passenger Side Cooling"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_directstartsettings_seat_row2_passengerside_heating": {
+        "name": "Vehicle Cabin Hvac Preconditioning Direct Start Settings Seat Row2 Passenger Side Heating"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_directstartsettings_seat_row3_driverside_cooling": {
+        "name": "Vehicle Cabin Hvac Preconditioning Direct Start Settings Seat Row3 Driver Side Cooling"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_directstartsettings_seat_row3_driverside_heating": {
+        "name": "Vehicle Cabin Hvac Preconditioning Direct Start Settings Seat Row3 Driver Side Heating"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_directstartsettings_seat_row3_passengerside_cooling": {
+        "name": "Vehicle Cabin Hvac Preconditioning Direct Start Settings Seat Row3 Passenger Side Cooling"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_directstartsettings_seat_row3_passengerside_heating": {
+        "name": "Vehicle Cabin Hvac Preconditioning Direct Start Settings Seat Row3 Passenger Side Heating"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_directstartsettings_steeringwheel_heating": {
+        "name": "Vehicle Cabin Hvac Preconditioning Direct Start Settings Steering Wheel Heating"
+      },
+      "vehicle_cabin_hvac_preconditioning_status_isexteriormirrorheatingactive": {
+        "name": "Vehicle Cabin Hvac Preconditioning Status Exterior Mirror Heating Active"
+      },
+      "vehicle_channel_ista_obfcm_lasttransmissionstatus": {
+        "name": "Vehicle Channel Ista Obfcm Last Transmission Status"
+      },
+      "vehicle_drivetrain_electricengine_charging_acrestriction_factor": {
+        "name": "Vehicle Drivetrain Electric Engine Charging Ac Restriction Factor"
+      },
+      "vehicle_drivetrain_electricengine_charging_authentication_status": {
+        "name": "Vehicle Drivetrain Electric Engine Charging Authentication Status"
+      },
+      "vehicle_drivetrain_electricengine_charging_consumptionoverlifetime_engineoff_gridenergy": {
+        "name": "Vehicle Drivetrain Electric Engine Charging Consumption Over Life Time Engine Off Grid Energy"
+      },
+      "vehicle_drivetrain_electricengine_charging_consumptionoverlifetime_engineoff_referencedistance": {
+        "name": "Vehicle Drivetrain Electric Engine Charging Consumption Over Life Time Engine Off Reference Distance"
+      },
+      "vehicle_drivetrain_electricengine_charging_consumptionoverlifetime_engineon_gridenergy": {
+        "name": "Vehicle Drivetrain Electric Engine Charging Consumption Over Life Time Engine On Grid Energy"
+      },
+      "vehicle_drivetrain_electricengine_charging_consumptionoverlifetime_engineon_referencedistance": {
+        "name": "Vehicle Drivetrain Electric Engine Charging Consumption Over Life Time Engine On Reference Distance"
+      },
+      "vehicle_drivetrain_electricengine_charging_consumptionoverlifetime_overall_gridenergy": {
+        "name": "Vehicle Drivetrain Electric Engine Charging Consumption Over Life Time Overall Grid Energy"
+      },
+      "vehicle_drivetrain_electricengine_charging_consumptionoverlifetime_overall_referencedistance": {
+        "name": "Vehicle Drivetrain Electric Engine Charging Consumption Over Life Time Overall Reference Distance"
+      },
+      "vehicle_drivetrain_electricengine_charging_isimmediatechargingsystemreason": {
+        "name": "Vehicle Drivetrain Electric Engine Charging Is Immediate Charging System Reason"
+      },
+      "vehicle_drivetrain_electricengine_charging_lastchargingreason": {
+        "name": "Vehicle Drivetrain Electric Engine Charging Last Charging Reason"
+      },
+      "vehicle_drivetrain_electricengine_charging_lastchargingresult": {
+        "name": "Vehicle Drivetrain Electric Engine Charging Last Charging Result"
+      },
+      "vehicle_drivetrain_electricengine_charging_modedeviation": {
+        "name": "Vehicle Drivetrain Electric Engine Charging Mode Deviation"
+      },
+      "vehicle_drivetrain_electricengine_charging_profile_settings_bidirectionalcharging_departuretimerelevant": {
+        "name": "Vehicle Drivetrain Electric Engine Charging Profile Settings Bi Directional Charging Departure Time Relevant"
+      },
+      "vehicle_drivetrain_electricengine_charging_profile_settings_bidirectionalcharging_dischargeallowed": {
+        "name": "Vehicle Drivetrain Electric Engine Charging Profile Settings Bi Directional Charging Discharge Allowed"
+      },
+      "vehicle_drivetrain_electricengine_charging_windowselection": {
+        "name": "Vehicle Drivetrain Electric Engine Charging Window Selection"
+      },
+      "vehicle_drivetrain_fuelsystem_consumptionoverlifetime_inchargedepleting_fuel": {
+        "name": "Vehicle Drivetrain Fuel System Consumption Over Life Time In Charge Depleting Fuel"
+      },
+      "vehicle_drivetrain_fuelsystem_consumptionoverlifetime_inchargedepleting_referencedistanceengineoff": {
+        "name": "Vehicle Drivetrain Fuel System Consumption Over Life Time In Charge Depleting Reference Distance Engine Off"
+      },
+      "vehicle_drivetrain_fuelsystem_consumptionoverlifetime_inchargedepleting_referencedistanceengineon": {
+        "name": "Vehicle Drivetrain Fuel System Consumption Over Life Time In Charge Depleting Reference Distance Engine On"
+      },
+      "vehicle_drivetrain_fuelsystem_consumptionoverlifetime_inchargeincreasing_fuel": {
+        "name": "Vehicle Drivetrain Fuel System Consumption Over Life Time In Charge Increasing Fuel"
+      },
+      "vehicle_drivetrain_fuelsystem_consumptionoverlifetime_inchargeincreasing_referencedistance": {
+        "name": "Vehicle Drivetrain Fuel System Consumption Over Life Time In Charge Increasing Reference Distance"
+      },
+      "vehicle_electroniccontrolunit_diagnostictroublecodes_raw": {
+        "name": "Vehicle Electronic Control Unit Diagnostic Trouble Codes Raw"
+      },
+      "vehicle_extras_optionalequipment_code": {
+        "name": "Vehicle Extras Optional Equipment Code"
+      },
+      "vehicle_look_image": {
+        "name": "Vehicle Look Image"
+      },
+      "vehicle_powertrain_electric_battery_bidirectionalcharging_availability": {
+        "name": "Vehicle Powertrain Electric Battery Bi Directional Charging Availability"
+      },
+      "vehicle_powertrain_electric_battery_charging_authenticationstatus": {
+        "name": "Vehicle Powertrain Electric Battery Charging Authentication Status"
+      },
+      "vehicle_powertrain_electric_battery_charging_batterycarepersisted_isactive": {
+        "name": "Vehicle Powertrain Electric Battery Charging Battery Care Persisted Is Active"
+      },
+      "vehicle_powertrain_electric_battery_charging_batterycarepersisted_ispreservingchargingmode": {
+        "name": "Vehicle Powertrain Electric Battery Charging Battery Care Persisted Is Preserving Charging Mode"
+      },
+      "vehicle_powertrain_electric_battery_charging_batterycarepersisted_isreducedtargetsoe": {
+        "name": "Vehicle Powertrain Electric Battery Charging Battery Care Persisted Is Reduced Target Soe"
+      },
+      "vehicle_powertrain_electric_battery_charging_cablecheckvoltage": {
+        "name": "Vehicle Powertrain Electric Battery Charging Cable Check Voltage"
+      },
+      "vehicle_powertrain_electric_battery_charging_dcchargingmodeactive": {
+        "name": "Vehicle Powertrain Electric Battery Charging Dc Charging Mode Active"
+      },
+      "vehicle_powertrain_electric_battery_charging_history_sessionslist": {
+        "name": "Vehicle Powertrain Electric Battery Charging History Sessions List"
+      },
+      "vehicle_powertrain_electric_battery_charging_settingslist": {
+        "name": "Vehicle Powertrain Electric Battery Charging Settings List"
+      },
+      "vehicle_powertrain_electric_battery_preconditioning_automaticmode_statusfeedback": {
+        "name": "Vehicle Powertrain Electric Battery Preconditioning Automatic Mode Status Feedback"
+      },
+      "vehicle_powertrain_electric_battery_preconditioning_manualmode_statusfeedback": {
+        "name": "Vehicle Powertrain Electric Battery Preconditioning Manual Mode Status Feedback"
+      },
+      "vehicle_powertrain_electric_battery_stateofcharge_targetmin": {
+        "name": "Vehicle Powertrain Electric Battery State Of Charge Target Min"
+      },
+      "vehicle_powertrain_electric_battery_stateofcharge_targetsocforprofessionalmode": {
+        "name": "Vehicle Powertrain Electric Battery State Of Charge Target Soc For Professional Mode"
+      },
+      "vehicle_powertrain_electric_battery_stateofhealth_displayed": {
+        "name": "Vehicle Powertrain Electric Battery State Of Health Displayed"
+      },
+      "vehicle_powertrain_tractionbattery_charging_port_frontleft_flap_isautomaticopenandcloseactive": {
+        "name": "Vehicle Powertrain Traction Battery Charging Port Front Left Flap Is Automatic Open And Close Active"
+      },
+      "vehicle_powertrain_tractionbattery_charging_port_frontmiddle_flap_isautomaticopenandcloseactive": {
+        "name": "Vehicle Powertrain Traction Battery Charging Port Front Middle Flap Is Automatic Open And Close Active"
+      },
+      "vehicle_powertrain_tractionbattery_charging_port_frontmiddle_flap_isopen": {
+        "name": "Vehicle Powertrain Traction Battery Charging Port Front Middle Flap Is Open"
+      },
+      "vehicle_powertrain_tractionbattery_charging_port_frontright_flap_isautomaticopenandcloseactive": {
+        "name": "Vehicle Powertrain Traction Battery Charging Port Front Right Flap Is Automatic Open And Close Active"
+      },
+      "vehicle_powertrain_tractionbattery_charging_port_rearleft_flap_isautomaticopenandcloseactive": {
+        "name": "Vehicle Powertrain Traction Battery Charging Port Rear Left Flap Is Automatic Open And Close Active"
+      },
+      "vehicle_powertrain_tractionbattery_charging_port_rearmiddle_flap_isautomaticopenandcloseactive": {
+        "name": "Vehicle Powertrain Traction Battery Charging Port Rear Middle Flap Is Automatic Open And Close Active"
+      },
+      "vehicle_powertrain_tractionbattery_charging_port_rearmiddle_flap_isopen": {
+        "name": "Vehicle Powertrain Traction Battery Charging Port Rear Middle Flap Is Open"
+      },
+      "vehicle_powertrain_tractionbattery_charging_port_rearright_flap_isautomaticopenandcloseactive": {
+        "name": "Vehicle Powertrain Traction Battery Charging Port Rear Right Flap Is Automatic Open And Close Active"
+      },
+      "vehicle_trip_segment_accumulated_drivetrain_electricengine_recuperationtotal": {
+        "name": "Vehicle Trip Segment Accumulated Drivetrain Electric Engine Recuperation Total"
+      },
+      "vehicle_vehicleidentification_basicvehicledata": {
+        "name": "Vehicle Vehicle Identification Basic Vehicle Data"
       },
       "status": {
         "name": "Status"

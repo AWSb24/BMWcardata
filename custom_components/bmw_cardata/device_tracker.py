@@ -12,7 +12,7 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.dispatcher import async_dispatcher_connect
 from homeassistant.helpers.translation import async_get_translations
 
-from .const import DOMAIN, SIGNAL_CARDATA_UPDATE
+from .const import DOMAIN, CONF_GCID, get_device_name, SIGNAL_CARDATA_UPDATE
 
 KEY_LATITUDE = "vehicle_cabin_infotainment_navigation_currentLocation_latitude"
 KEY_LONGITUDE = "vehicle_cabin_infotainment_navigation_currentLocation_longitude"
@@ -30,12 +30,19 @@ def _parse_float(value: Any) -> float | None:
         return None
 
 
+def _has_lat_lon(store: Any) -> bool:
+    """True if store has latitude and longitude for at least one VIN."""
+    lat = store.get_first_value_for_key(KEY_LATITUDE)
+    lon = store.get_first_value_for_key(KEY_LONGITUDE)
+    return lat is not None and lon is not None
+
+
 async def async_setup_entry(
     hass: HomeAssistant,
     config_entry: ConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> None:
-    """Set up BMW CarData device tracker for vehicle position."""
+    """Set up BMW CarData device tracker; add it only after lat/lon data is received via MQTT."""
     entry_data = hass.data.get(DOMAIN, {}).get(config_entry.entry_id)
     if not entry_data:
         _LOGGER.warning("BMW CarData: No entry_data for entry %s", config_entry.entry_id)
@@ -44,8 +51,29 @@ async def async_setup_entry(
     if not store:
         return
 
-    tracker = BMWCarDataDeviceTracker(hass, config_entry, entry_data)
-    async_add_entities([tracker])
+    tracker_added = False
+
+    @callback
+    def _on_cardata_maybe_add_tracker(entry_id: str, vin: str) -> None:
+        nonlocal tracker_added
+        if entry_id != config_entry.entry_id or tracker_added:
+            return
+        if not _has_lat_lon(store):
+            return
+        tracker_added = True
+        tracker = BMWCarDataDeviceTracker(hass, config_entry, entry_data)
+        async_add_entities([tracker])
+        _LOGGER.debug("BMW CarData: Added device tracker after receiving lat/lon")
+
+    config_entry.async_on_unload(
+        async_dispatcher_connect(hass, SIGNAL_CARDATA_UPDATE, _on_cardata_maybe_add_tracker)
+    )
+
+    # If store already has lat/lon (e.g. after restart with persisted state), add tracker now
+    if _has_lat_lon(store):
+        tracker_added = True
+        tracker = BMWCarDataDeviceTracker(hass, config_entry, entry_data)
+        async_add_entities([tracker])
 
 
 class BMWCarDataDeviceTracker(TrackerEntity):
@@ -68,9 +96,11 @@ class BMWCarDataDeviceTracker(TrackerEntity):
         self._store = entry_data["store"]
         self._attr_name = "Vehicle"
         self._attr_unique_id = f"{config_entry.entry_id}_location"
+        gcid = (config_entry.data.get(CONF_GCID) or "").strip()
+        vin = self._store.all_vins()[0] if self._store.all_vins() else None
         self._attr_device_info = {
             "identifiers": {(DOMAIN, config_entry.entry_id)},
-            "name": config_entry.title or "BMW CarData",
+            "name": get_device_name(gcid, vin),
             "manufacturer": "BMW",
         }
         self._update_position()

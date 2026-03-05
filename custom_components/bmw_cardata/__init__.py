@@ -204,8 +204,9 @@ async def async_setup_entry(
 
     @callback
     def on_message(vin: str, event_name: str, payload: dict) -> None:
-        if vin:
-            store.ensure_vin(vin)
+        if not vin:
+            return
+        store.ensure_vin(vin)
         parsed = parse_cardata_message(vin, event_name, payload)
         if _LOGGER.isEnabledFor(logging.DEBUG) and parsed:
             _LOGGER.debug(
