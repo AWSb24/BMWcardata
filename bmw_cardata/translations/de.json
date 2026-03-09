@@ -1,0 +1,950 @@
+{
+  "config": {
+    "step": {
+      "vin": {
+        "title": "Fahrzeugidentifikation (FIN)",
+        "description": "Geben Sie die **FIN** (17 Zeichen) des Fahrzeugs ein.\n\nDie FIN finden Sie auf derselben CarData-Seite wie Client-ID und GCID, im Abschnitt **CarData-Streaming**.\n\nWenn Sie bereits ein Fahrzeug hinzugefügt haben, sind Client-ID und GCID bei allen Fahrzeugen gleich—nur die FIN unterscheidet sich. Sie können die nächsten Schritte überspringen und Ihre bestehenden Zugangsdaten verwenden.",
+        "data": {
+          "vin": "FIN (17 Zeichen)",
+          "skip_credentials": "Bestehende Zugangsdaten verwenden (Client-ID und GCID überspringen)"
+        },
+        "data_description": {
+          "vin": "Die Fahrzeugidentifikationsnummer, 17 alphanumerische Zeichen",
+          "skip_credentials": "Zugangsdaten einer bereits eingerichteten BMW CarData-Integration verwenden"
+        }
+      },
+      "credentials": {
+        "title": "BMW CarData Zugangsdaten",
+        "description": "Geben Sie Ihre BMW CarData **Client-ID** und **GCID** aus der MyBMW-App bzw. der Website ein.\n\n**So finden Sie die Werte:**\n- Gehen Sie zu **My BMW** → **Persönliche Daten** → **Meine Fahrzeuge** → **CarData**\n- **Client-ID:** Erstellen oder kopieren Sie unter \"Client-ID erstellen\" (GUID-Format)\n- **GCID:** Unter **CARDATA STREAM** → \"Verbindungsdetails anzeigen\" → **USERNAME** kopieren. Die **FIN** steht im selben Abschnitt.",
+        "data": {
+          "client_id": "Client-ID (GUID)",
+          "gcid": "GCID (Stream-Benutzername)"
+        },
+        "data_description": {
+          "client_id": "Die Client-ID aus MyBMW CarData (z. B. xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx)",
+          "gcid": "Die GCID bzw. der Benutzername aus den CarData-Stream-Verbindungsdetails"
+        }
+      },
+      "device_flow": {
+        "title": "BMW-Anmeldung abschließen",
+        "description": "**Verifizierungs-URL:**\n\n{verification_url}\n\nBitte öffnen Sie den Link oben in Ihrem Browser und melden Sie sich mit Ihrem BMW-Konto an. Wenn \"Anmeldung erfolgreich\" angezeigt wird, kehren Sie hierher zurück und klicken Sie auf **Weiter**.",
+        "data": {}
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "BMW CarData erneut anmelden",
+        "description": "Melden Sie Ihr BMW-Konto erneut an, um die Verbindung zu aktualisieren. Klicken Sie auf **Weiter**, um im nächsten Schritt einen Verifizierungslink zu öffnen."
+      },
+      "reauth_verify": {
+        "title": "BMW-Anmeldung bestätigen",
+        "description": "**Verifizierungs-URL:**\n\n{verification_url}\n\nÖffnen Sie den Link oben in Ihrem Browser und melden Sie sich mit Ihrem BMW-Konto an. Wenn \"Anmeldung erfolgreich\" angezeigt wird, kehren Sie hierher zurück und klicken Sie auf **Weiter**."
+      },
+      "reauth_success": {
+        "title": "Erneute Anmeldung erfolgreich",
+        "description": "Ihre BMW CarData-Verbindung wurde aktualisiert. Sie können dieses Fenster schließen."
+      }
+    },
+    "abort": {
+      "reauth_successful": "Erneute Anmeldung erfolgreich."
+    }
+  },
+  "error": {
+    "invalid_credentials": "Ungültige Client-ID oder GCID. Prüfen Sie das Format (GUID für die Client-ID).",
+    "invalid_vin": "Die FIN muss genau 17 alphanumerische Zeichen haben.",
+    "no_existing_credentials": "Keine bestehende BMW CarData-Integration mit gültiger Client-ID und GCID gefunden. Bitte geben Sie die Zugangsdaten im nächsten Schritt ein.",
+    "device_flow_failed": "Token konnten nicht abgerufen werden. Bitte schließen Sie die Anmeldung im Browser ab und versuchen Sie es erneut.",
+    "cannot_connect": "Verbindung zu BMW CarData nicht möglich. Bitte prüfen Sie Ihre Zugangsdaten."
+  },
+  "abort": {
+    "already_configured": "Dieses BMW CarData-Konto ist bereits eingerichtet."
+  },
+  "entity": {
+    "sensor": {
+      "vehicle_vehicle_antitheftalarmsystem_alarm_activationtime": {
+        "name": "Anti Theft Alarm System Alarm Aktivierung Zeit"
+      },
+      "vehicle_vehicle_antitheftalarmsystem_alarm_armstatus": {
+        "name": "Anti Theft Alarm System Alarm Bewaffnet Status"
+      },
+      "vehicle_vehicle_antitheftalarmsystem_alarm_ison": {
+        "name": "Anti Theft Alarm System Alarm Is On"
+      },
+      "vehicle_electricalsystem_battery_servicedemand_recharge": {
+        "name": "Elektrisch System Batterie Service Anforderung Aufladen"
+      },
+      "vehicle_electricalsystem_battery_servicedemand_replace": {
+        "name": "Elektrisch System Batterie Service Anforderung Ersetzen"
+      },
+      "vehicle_electricalsystem_battery_stateofcharge": {
+        "name": "Elektrisch System Batterie Zustand Of Ladung"
+      },
+      "vehicle_electricalsystem_battery_stateofchargeplausibility": {
+        "name": "Elektrisch System Batterie Zustand Of Ladung Plausibilität"
+      },
+      "vehicle_electricalsystem_battery_voltage": {
+        "name": "Elektrisch System Batterie Spannung"
+      },
+      "vehicle_electricalsystem_battery48v_stateofhealth_displayed": {
+        "name": "Elektrisch System Battery48V Zustand Of Zustand Angezeigt"
+      },
+      "vehicle_powertrain_electric_battery_charging_power": {
+        "name": "Antriebsstrang Elektro Batterie Laden Leistung"
+      },
+      "vehicle_drivetrain_batterymanagement_header": {
+        "name": "Antrieb Batterie Verwaltung Kopf"
+      },
+      "vehicle_drivetrain_batterymanagement_maxenergy": {
+        "name": "Antrieb Batterie Verwaltung Max Energie"
+      },
+      "vehicle_drivetrain_batterymanagement_batterysizemax": {
+        "name": "Antrieb Batterie Verwaltung Batterie Größe Max"
+      },
+      "vehicle_drivetrain_electricengine_charging_status": {
+        "name": "Antrieb Elektro Motor Laden Status"
+      },
+      "vehicle_drivetrain_electricengine_charging_level": {
+        "name": "Antrieb Elektro Motor Laden Füllstand"
+      },
+      "vehicle_drivetrain_electricengine_charging_timeremaining": {
+        "name": "Antrieb Elektro Motor Laden Zeit Verbleibend"
+      },
+      "vehicle_drivetrain_electricengine_charging_timetofullycharged": {
+        "name": "Antrieb Elektro Motor Laden Zeit To Fully Charged"
+      },
+      "vehicle_drivetrain_electricengine_remainingelectricrange": {
+        "name": "Antrieb Elektro Motor Verbleibend Elektro Reichweite"
+      },
+      "vehicle_drivetrain_electricengine_kombiremainingelectricrange": {
+        "name": "Antrieb Elektro Motor Kombi Verbleibend Elektro Reichweite"
+      },
+      "vehicle_drivetrain_electricengine_hvsmaxenergyabsolute": {
+        "name": "Antrieb Elektro Motor Hvs Max Energie Absolute"
+      },
+      "vehicle_drivetrain_fuelsystem_level": {
+        "name": "Antrieb Kraftstoff System Füllstand"
+      },
+      "vehicle_drivetrain_fuelsystem_remainingfuel": {
+        "name": "Antrieb Kraftstoff System Verbleibend Kraftstoff"
+      },
+      "vehicle_drivetrain_lastremainingrange": {
+        "name": "Antrieb Letzter Verbleibend Reichweite"
+      },
+      "vehicle_drivetrain_totalremainingrange": {
+        "name": "Antrieb Total Verbleibend Reichweite"
+      },
+      "vehicle_drivetrain_avgelectricrangeconsumption": {
+        "name": "Antrieb Durchschn. Elektro Reichweite Verbrauch"
+      },
+      "vehicle_drivetrain_engine_isactive": {
+        "name": "Antrieb Motor Is Aktiv"
+      },
+      "vehicle_drivetrain_engine_isignitionon": {
+        "name": "Antrieb Motor Is Ignition On"
+      },
+      "vehicle_drivetrain_internalcombustionengine_engine_ect": {
+        "name": "Antrieb Intern Verbrennung Motor Motor Kühlmitteltemp."
+      },
+      "vehicle_cabin_door_row1_driver_isopen": {
+        "name": "Innenraum Tür Reihe 1 Fahrer Is Offen"
+      },
+      "vehicle_cabin_door_row1_passenger_isopen": {
+        "name": "Innenraum Tür Reihe 1 Beifahrer Is Offen"
+      },
+      "vehicle_cabin_door_row2_driver_isopen": {
+        "name": "Innenraum Tür Reihe 2 Fahrer Is Offen"
+      },
+      "vehicle_cabin_door_row2_passenger_isopen": {
+        "name": "Innenraum Tür Reihe 2 Beifahrer Is Offen"
+      },
+      "vehicle_cabin_door_lock_status": {
+        "name": "Innenraum Tür Verriegelung Status"
+      },
+      "vehicle_cabin_door_status": {
+        "name": "Innenraum Tür Status"
+      },
+      "vehicle_cabin_infotainment_navigation_currentlocation_latitude": {
+        "name": "Innenraum Infotainment Navigation Aktuell Standort Breitengrad"
+      },
+      "vehicle_cabin_infotainment_navigation_currentlocation_longitude": {
+        "name": "Innenraum Infotainment Navigation Aktuell Standort Längengrad"
+      },
+      "vehicle_cabin_infotainment_navigation_currentlocation_altitude": {
+        "name": "Innenraum Infotainment Navigation Aktuell Standort Höhe"
+      },
+      "vehicle_cabin_infotainment_navigation_currentlocation_heading": {
+        "name": "Innenraum Infotainment Navigation Aktuell Standort Richtung"
+      },
+      "vehicle_cabin_infotainment_navigation_currentlocation_numberofsatellites": {
+        "name": "Innenraum Infotainment Navigation Aktuell Standort Anzahl Of Satelliten"
+      },
+      "vehicle_cabin_infotainment_navigation_currentlocation_fixstatus": {
+        "name": "Innenraum Infotainment Navigation Aktuell Standort Fix Status"
+      },
+      "vehicle_body_hood_isopen": {
+        "name": "Karosserie Motorhaube Is Offen"
+      },
+      "vehicle_body_trunk_isopen": {
+        "name": "Karosserie Kofferraum Is Offen"
+      },
+      "vehicle_body_trunk_door_isopen": {
+        "name": "Karosserie Kofferraum Tür Is Offen"
+      },
+      "vehicle_body_lights_isrunningon": {
+        "name": "Karosserie Lichter Is Running On"
+      },
+      "vehicle_body_chargingport_combinedstatus": {
+        "name": "Karosserie Laden Anschluss Kombiniert Status"
+      },
+      "vehicle_body_chargingport_status": {
+        "name": "Karosserie Laden Anschluss Status"
+      },
+      "vehicle_ismoving": {
+        "name": "Is In Bewegung"
+      },
+      "vehicle_vehicle_travelleddistance": {
+        "name": "Zurückgelegt Strecke"
+      },
+      "vehicle_vehicle_avgspeed": {
+        "name": "Durchschn. Geschwindigkeit"
+      },
+      "vehicle_cabin_seat_row1_driverside_heating": {
+        "name": "Innenraum Sitz Reihe 1 Fahrer Side Heizung"
+      },
+      "vehicle_cabin_seat_row1_passengerside_heating": {
+        "name": "Innenraum Sitz Reihe 1 Beifahrer Side Heizung"
+      },
+      "vehicle_cabin_seat_row2_driverside_heating": {
+        "name": "Innenraum Sitz Reihe 2 Fahrer Side Heizung"
+      },
+      "vehicle_cabin_seat_row2_passengerside_heating": {
+        "name": "Innenraum Sitz Reihe 2 Beifahrer Side Heizung"
+      },
+      "vehicle_cabin_steeringwheel_heating": {
+        "name": "Innenraum Lenkrad Rad Heizung"
+      },
+      "vehicle_cabin_sunroof_status": {
+        "name": "Innenraum Schiebedach Status"
+      },
+      "vehicle_cabin_sunroof_overallstatus": {
+        "name": "Innenraum Schiebedach Gesamt Status"
+      },
+      "vehicle_cabin_window_row1_driver_status": {
+        "name": "Innenraum Fenster Reihe 1 Fahrer Status"
+      },
+      "vehicle_cabin_window_row1_passenger_status": {
+        "name": "Innenraum Fenster Reihe 1 Beifahrer Status"
+      },
+      "vehicle_cabin_window_row2_driver_status": {
+        "name": "Innenraum Fenster Reihe 2 Fahrer Status"
+      },
+      "vehicle_cabin_window_row2_passenger_status": {
+        "name": "Innenraum Fenster Reihe 2 Beifahrer Status"
+      },
+      "vehicle_chassis_axle_row1_wheel_left_tire_pressure": {
+        "name": "Fahrwerk Achse Reihe 1 Rad Links Reifen Druck"
+      },
+      "vehicle_chassis_axle_row1_wheel_right_tire_pressure": {
+        "name": "Fahrwerk Achse Reihe 1 Rad Rechts Reifen Druck"
+      },
+      "vehicle_chassis_axle_row2_wheel_left_tire_pressure": {
+        "name": "Fahrwerk Achse Reihe 2 Rad Links Reifen Druck"
+      },
+      "vehicle_chassis_axle_row2_wheel_right_tire_pressure": {
+        "name": "Fahrwerk Achse Reihe 2 Rad Rechts Reifen Druck"
+      },
+      "vehicle_status_checkcontrolmessages": {
+        "name": "Status Prüfung Kontrolle Meldungen"
+      },
+      "vehicle_status_conditionbasedservices": {
+        "name": "Status Zustand basiert Dienste"
+      },
+      "vehicle_status_servicedistance_next": {
+        "name": "Status Service Strecke Nächster"
+      },
+      "vehicle_status_servicetime_inspectiondatelegal": {
+        "name": "Status Service Zeit Inspektion Datum Gesetzlich"
+      },
+      "vehicle_trip_segment_end_travelleddistance": {
+        "name": "Fahrt Abschnitt Ende Zurückgelegt Strecke"
+      },
+      "vehicle_trip_segment_end_time": {
+        "name": "Fahrt Abschnitt Ende Zeit"
+      },
+      "vehicle_vehicle_preconditioning_activity": {
+        "name": "Pre Conditioning Aktivität"
+      },
+      "vehicle_vehicle_preconditioning_remainingtime": {
+        "name": "Pre Conditioning Verbleibend Zeit"
+      },
+      "vehicle_cabin_hvac_preconditioning_status_progress": {
+        "name": "Innenraum Klima Vorklimatisierung Status Fortschritt"
+      },
+      "vehicle_cabin_hvac_preconditioning_status_remainingrunningtime": {
+        "name": "Innenraum Klima Vorklimatisierung Status Verbleibend Running Zeit"
+      },
+      "vehicle_cabin_climate_timers_weekdaystimer1_action": {
+        "name": "Innenraum Klima Timer Wochentage Timer1 Aktion"
+      },
+      "vehicle_cabin_climate_timers_weekdaystimer2_action": {
+        "name": "Innenraum Klima Timer Wochentage Timer2 Aktion"
+      },
+      "vehicle_drivetrain_electricengine_charging_method": {
+        "name": "Antrieb Elektro Motor Laden Methode"
+      },
+      "vehicle_drivetrain_electricengine_charging_connectorstatus": {
+        "name": "Antrieb Elektro Motor Laden Stecker Status"
+      },
+      "vehicle_drivetrain_electricengine_charging_connectiontype": {
+        "name": "Antrieb Elektro Motor Laden Verbindung Typ"
+      },
+      "vehicle_powertrain_tractionbattery_charging_port_anyposition_isplugged": {
+        "name": "Antriebsstrang Traktions Batterie Laden Anschluss Beliebig Position Is Eingesteckt"
+      },
+      "vehicle_powertrain_tractionbattery_charging_port_frontleft_isplugged": {
+        "name": "Antriebsstrang Traktions Batterie Laden Anschluss Vorne Links Is Eingesteckt"
+      },
+      "vehicle_powertrain_tractionbattery_charging_port_frontright_isplugged": {
+        "name": "Antriebsstrang Traktions Batterie Laden Anschluss Vorne Rechts Is Eingesteckt"
+      },
+      "vehicle_powertrain_tractionbattery_charging_port_rearleft_isplugged": {
+        "name": "Antriebsstrang Traktions Batterie Laden Anschluss Hinten Links Is Eingesteckt"
+      },
+      "vehicle_powertrain_tractionbattery_charging_port_rearright_isplugged": {
+        "name": "Antriebsstrang Traktions Batterie Laden Anschluss Hinten Rechts Is Eingesteckt"
+      },
+      "vehicle_powertrain_tractionbattery_charging_port_anyposition_flap_isopen": {
+        "name": "Antriebsstrang Traktions Batterie Laden Anschluss Beliebig Position Klappe Is Offen"
+      },
+      "vehicle_powertrain_electric_battery_stateofcharge_target": {
+        "name": "Antriebsstrang Elektro Batterie Zustand Of Ladung Ziel"
+      },
+      "vehicle_powertrain_electric_battery_preconditioning_state": {
+        "name": "Antriebsstrang Elektro Batterie Vorklimatisierung Zustand"
+      },
+      "vehicle_powertrain_electric_range_target": {
+        "name": "Antriebsstrang Elektro Reichweite Ziel"
+      },
+      "vehicle_drivetrain_electricengine_charging_chargingmode": {
+        "name": "Antrieb Elektro Motor Laden Lademodus"
+      },
+      "vehicle_drivetrain_electricengine_charging_profile_mode": {
+        "name": "Antrieb Elektro Motor Laden Profil Modus"
+      },
+      "vehicle_drivetrain_electricengine_charging_profile_preference": {
+        "name": "Antrieb Elektro Motor Laden Profil Einstellung"
+      },
+      "vehicle_drivetrain_electricengine_charging_profile_isrcpconfigcomplete": {
+        "name": "Antrieb Elektro Motor Laden Profil Rcp Konfiguration vollständig"
+      },
+      "vehicle_drivetrain_electricengine_charging_acampere": {
+        "name": "Antrieb Elektro Motor Laden Ac Ampere"
+      },
+      "vehicle_drivetrain_electricengine_charging_acvoltage": {
+        "name": "Antrieb Elektro Motor Laden Ac Spannung"
+      },
+      "vehicle_drivetrain_electricengine_charging_phasenumber": {
+        "name": "Antrieb Elektro Motor Laden Phase Anzahl"
+      },
+      "vehicle_channel_ngtp_timevehicle": {
+        "name": "Kanal Ngtp Zeit Fahrzeug"
+      },
+      "vehicle_cabin_infotainment_displayunit_distance": {
+        "name": "Innenraum Infotainment Anzeige Einheit Strecke"
+      },
+      "vehicle_cabin_infotainment_hmi_distanceunit": {
+        "name": "Innenraum Infotainment Hmi Strecke Einheit"
+      },
+      "vehicle_cabin_infotainment_ismobilephoneconnected": {
+        "name": "Innenraum Infotainment Is Mobil Telefon Verbunden"
+      },
+      "vehicle_sim_status": {
+        "name": "SIM Status"
+      },
+      "vehicle_vehicle_timesetting": {
+        "name": "Zeit Einstellung"
+      },
+      "vehicle_vehicle_avgauxpower": {
+        "name": "Durchschn. Aux Leistung"
+      },
+      "vehicle_vehicle_deepsleepmodeactive": {
+        "name": "Deep Sleep Modus Aktiv"
+      },
+      "vehicle_vehicle_speedrange_lowerbound": {
+        "name": "Geschwindigkeit Reichweite Untere Grenze"
+      },
+      "vehicle_vehicle_speedrange_upperbound": {
+        "name": "Geschwindigkeit Reichweite Obere Grenze"
+      },
+      "vehicle_vehicle_averageweeklydistancelongterm": {
+        "name": "Durchschnitt Wöchentlich Strecke Lang Frist"
+      },
+      "vehicle_vehicle_averageweeklydistanceshortterm": {
+        "name": "Durchschnitt Wöchentlich Strecke Kurz Frist"
+      },
+      "vehicle_cabin_convertible_roofstatus": {
+        "name": "Innenraum Cabrio Dach Status"
+      },
+      "vehicle_cabin_convertible_roofretractablestatus": {
+        "name": "Innenraum Cabrio Dach Einziehbar Status"
+      },
+      "vehicle_body_flap_islocked": {
+        "name": "Karosserie Klappe Is Verriegelt"
+      },
+      "vehicle_body_flap_ispermanentlyunlocked": {
+        "name": "Karosserie Klappe Is Dauerhaft Entriegelt"
+      },
+      "vehicle_cabin_hvac_statusairpurification": {
+        "name": "Innenraum Klima Status Luft Filterung"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_defaultsettings_targettemperature": {
+        "name": "Innenraum Klima Vorklimatisierung Konfiguration Standard Einstellungen Ziel Temperatur"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_directstartsettings_targettemperature": {
+        "name": "Innenraum Klima Vorklimatisierung Konfiguration Direkt Start Einstellungen Ziel Temperatur"
+      },
+      "vehicle_cabin_hvac_preconditioning_status_comfortstate": {
+        "name": "Innenraum Klima Vorklimatisierung Status Komfort Zustand"
+      },
+      "vehicle_cabin_hvac_preconditioning_status_reardefrostactive": {
+        "name": "Innenraum Klima Vorklimatisierung Status Hinten Entfrostung Aktiv"
+      },
+      "vehicle_vehicle_preconditioning_isremoteenginerunning": {
+        "name": "Pre Conditioning Is Fern Motor Running"
+      },
+      "vehicle_vehicle_preconditioning_isremoteenginestartallowed": {
+        "name": "Pre Conditioning Is Fern Motor Start Erlaubt"
+      },
+      "vehicle_vehicle_preconditioning_error": {
+        "name": "Pre Conditioning Fehler"
+      },
+      "vehicle_cabin_door_row1_driver_position": {
+        "name": "Innenraum Tür Reihe 1 Fahrer Position"
+      },
+      "vehicle_cabin_door_row1_passenger_position": {
+        "name": "Innenraum Tür Reihe 1 Beifahrer Position"
+      },
+      "vehicle_cabin_door_row2_driver_position": {
+        "name": "Innenraum Tür Reihe 2 Fahrer Position"
+      },
+      "vehicle_cabin_door_row2_passenger_position": {
+        "name": "Innenraum Tür Reihe 2 Beifahrer Position"
+      },
+      "vehicle_cabin_infotainment_navigation_destinationset_arrivaltime": {
+        "name": "Innenraum Infotainment Navigation Ziel Gesetzt Ankunft Zeit"
+      },
+      "vehicle_cabin_infotainment_navigation_destinationset_distance": {
+        "name": "Innenraum Infotainment Navigation Ziel Gesetzt Strecke"
+      },
+      "vehicle_cabin_infotainment_navigation_destinationset_latitude": {
+        "name": "Innenraum Infotainment Navigation Ziel Gesetzt Breitengrad"
+      },
+      "vehicle_cabin_infotainment_navigation_destinationset_longitude": {
+        "name": "Innenraum Infotainment Navigation Ziel Gesetzt Längengrad"
+      },
+      "vehicle_cabin_infotainment_navigation_pointsofinterests_available": {
+        "name": "Innenraum Infotainment Navigation Punkte Of Interessen Verfügbar"
+      },
+      "vehicle_cabin_infotainment_navigation_pointsofinterests_max": {
+        "name": "Innenraum Infotainment Navigation Punkte Of Interessen Max"
+      },
+      "vehicle_cabin_infotainment_navigation_remainingrange": {
+        "name": "Innenraum Infotainment Navigation Verbleibend Reichweite"
+      },
+      "vehicle_learningnavigation": {
+        "name": "Lernen Navigation"
+      },
+      "vehicle_status_conditionbasedservicescount": {
+        "name": "Status Zustand basiert Dienste Anzahl"
+      },
+      "vehicle_status_conditionbasedservicesaveragedistanceperday": {
+        "name": "Status Zustand basiert Dienste Durchschnitt Strecke Pro Tag"
+      },
+      "vehicle_status_servicedistance_yellow": {
+        "name": "Status Service Strecke Gelb"
+      },
+      "vehicle_status_servicetime_yellow": {
+        "name": "Status Service Zeit Gelb"
+      },
+      "vehicle_status_servicetime_huandauserviceyellow": {
+        "name": "Status Service Zeit H Uand Au Service Gelb"
+      },
+      "vehicle_sevice_preferredsevicepartner": {
+        "name": "Service Bevorzugt Service Partner"
+      },
+      "vehicle_servicedemand_defect_id": {
+        "name": "Service Anforderung Defekt ID"
+      },
+      "vehicle_channel_teleservice_status": {
+        "name": "Kanal Teleservice Status"
+      },
+      "vehicle_channel_teleservice_lastautomaticservicecalltime": {
+        "name": "Kanal Teleservice Letzter Automatisch Service Anruf Zeit"
+      },
+      "vehicle_channel_teleservice_lastmanualcalltime": {
+        "name": "Kanal Teleservice Letzter Manuell Anruf Zeit"
+      },
+      "vehicle_channel_teleservice_lastbreakdowncalltime": {
+        "name": "Kanal Teleservice Letzter Panne Anruf Zeit"
+      },
+      "vehicle_channel_teleservice_lastteleservicereporttime": {
+        "name": "Kanal Teleservice Letzter Teleservice Bericht Zeit"
+      },
+      "vehicle_chassis_axle_row1_wheel_left_tire_pressuretarget": {
+        "name": "Fahrwerk Achse Reihe 1 Rad Links Reifen Druck Ziel"
+      },
+      "vehicle_chassis_axle_row1_wheel_left_tire_temperature": {
+        "name": "Fahrwerk Achse Reihe 1 Rad Links Reifen Temperatur"
+      },
+      "vehicle_chassis_axle_row1_wheel_right_tire_pressuretarget": {
+        "name": "Fahrwerk Achse Reihe 1 Rad Rechts Reifen Druck Ziel"
+      },
+      "vehicle_chassis_axle_row1_wheel_right_tire_temperature": {
+        "name": "Fahrwerk Achse Reihe 1 Rad Rechts Reifen Temperatur"
+      },
+      "vehicle_chassis_axle_row2_wheel_left_tire_pressuretarget": {
+        "name": "Fahrwerk Achse Reihe 2 Rad Links Reifen Druck Ziel"
+      },
+      "vehicle_chassis_axle_row2_wheel_left_tire_temperature": {
+        "name": "Fahrwerk Achse Reihe 2 Rad Links Reifen Temperatur"
+      },
+      "vehicle_chassis_axle_row2_wheel_right_tire_pressuretarget": {
+        "name": "Fahrwerk Achse Reihe 2 Rad Rechts Reifen Druck Ziel"
+      },
+      "vehicle_chassis_axle_row2_wheel_right_tire_temperature": {
+        "name": "Fahrwerk Achse Reihe 2 Rad Rechts Reifen Temperatur"
+      },
+      "vehicle_chassis_axle_wheel_tire_diagnosis": {
+        "name": "Fahrwerk Achse Rad Reifen Diagnose"
+      },
+      "vehicle_trip_segment_accumulated_drivetrain_electricengine_energyconsumptioncomfort": {
+        "name": "Fahrt Abschnitt Kumuliert Antrieb Elektro Motor Energie Verbrauch Komfort"
+      },
+      "vehicle_trip_segment_accumulated_drivetrain_transmission_setting_fractiondriveelectric": {
+        "name": "Fahrt Abschnitt Kumuliert Antrieb Getriebe Einstellung Anteil Fahren Elektro"
+      },
+      "vehicle_trip_segment_accumulated_drivetrain_transmission_setting_fractiondriveecopro": {
+        "name": "Fahrt Abschnitt Kumuliert Antrieb Getriebe Einstellung Anteil Fahren Eco Pro"
+      },
+      "vehicle_trip_segment_accumulated_drivetrain_transmission_setting_fractiondriveecoproplus": {
+        "name": "Fahrt Abschnitt Kumuliert Antrieb Getriebe Einstellung Anteil Fahren Eco Pro Plus"
+      },
+      "vehicle_trip_segment_end_drivetrain_batterymanagement_hvsoc": {
+        "name": "Fahrt Abschnitt Ende Antrieb Batterie Verwaltung Hv Soc"
+      },
+      "vehicle_trip_segment_accumulated_acceleration_starsaverage": {
+        "name": "Fahrt Abschnitt Kumuliert Beschleunigung Sterne Durchschnitt"
+      },
+      "vehicle_trip_segment_accumulated_chassis_brake_starsaverage": {
+        "name": "Fahrt Abschnitt Kumuliert Fahrwerk Bremse Sterne Durchschnitt"
+      },
+      "vehicle_body_trunk_islocked": {
+        "name": "Karosserie Kofferraum Is Verriegelt"
+      },
+      "vehicle_body_trunk_left_door_isopen": {
+        "name": "Karosserie Kofferraum Links Tür Is Offen"
+      },
+      "vehicle_body_trunk_right_door_isopen": {
+        "name": "Karosserie Kofferraum Rechts Tür Is Offen"
+      },
+      "vehicle_body_trunk_upper_door_isopen": {
+        "name": "Karosserie Kofferraum Obere Tür Is Offen"
+      },
+      "vehicle_body_trunk_lower_door_isopen": {
+        "name": "Karosserie Kofferraum Untere Tür Is Offen"
+      },
+      "vehicle_body_trunk_window_isopen": {
+        "name": "Karosserie Kofferraum Fenster Is Offen"
+      },
+      "vehicle_cabin_sunroof_relativeposition": {
+        "name": "Innenraum Schiebedach Relativ Position"
+      },
+      "vehicle_cabin_sunroof_tiltstatus": {
+        "name": "Innenraum Schiebedach Kipp Status"
+      },
+      "vehicle_cabin_sunroof_shade_position": {
+        "name": "Innenraum Schiebedach Sonnenschutz Position"
+      },
+      "vehicle_cabin_climate_timers_overwritetimer_action": {
+        "name": "Innenraum Klima Timer Überschreiben Timer Aktion"
+      },
+      "vehicle_cabin_climate_timers_overwritetimer_hour": {
+        "name": "Innenraum Klima Timer Überschreiben Timer Stunde"
+      },
+      "vehicle_cabin_climate_timers_overwritetimer_minute": {
+        "name": "Innenraum Klima Timer Überschreiben Timer Minute"
+      },
+      "vehicle_cabin_climate_timers_weekdaystimer1_hour": {
+        "name": "Innenraum Klima Timer Wochentage Timer1 Stunde"
+      },
+      "vehicle_cabin_climate_timers_weekdaystimer1_minute": {
+        "name": "Innenraum Klima Timer Wochentage Timer1 Minute"
+      },
+      "vehicle_cabin_climate_timers_weekdaystimer2_hour": {
+        "name": "Innenraum Klima Timer Wochentage Timer2 Stunde"
+      },
+      "vehicle_cabin_climate_timers_weekdaystimer2_minute": {
+        "name": "Innenraum Klima Timer Wochentage Timer2 Minute"
+      },
+      "vehicle_body_chargingport_dcstatus": {
+        "name": "Karosserie Laden Anschluss Dc Status"
+      },
+      "vehicle_body_chargingport_ishospitalityactive": {
+        "name": "Karosserie Laden Anschluss Is Gastfreundschaft Aktiv"
+      },
+      "vehicle_body_chargingport_lockedstatus": {
+        "name": "Karosserie Laden Anschluss Verriegelt Status"
+      },
+      "vehicle_body_chargingport_statuscleartext": {
+        "name": "Karosserie Laden Anschluss Status Clear Text"
+      },
+      "vehicle_powertrain_tractionbattery_charging_port_anyposition_flap_isautomaticopenandcloseactive": {
+        "name": "Antriebsstrang Traktions Batterie Laden Anschluss Beliebig Position Klappe Is Automatisch Offen And Close Aktiv"
+      },
+      "vehicle_powertrain_tractionbattery_charging_port_frontleft_flap_isopen": {
+        "name": "Antriebsstrang Traktions Batterie Laden Anschluss Vorne Links Klappe Is Offen"
+      },
+      "vehicle_powertrain_tractionbattery_charging_port_frontright_flap_isopen": {
+        "name": "Antriebsstrang Traktions Batterie Laden Anschluss Vorne Rechts Klappe Is Offen"
+      },
+      "vehicle_powertrain_tractionbattery_charging_port_rearleft_flap_isopen": {
+        "name": "Antriebsstrang Traktions Batterie Laden Anschluss Hinten Links Klappe Is Offen"
+      },
+      "vehicle_powertrain_tractionbattery_charging_port_rearright_flap_isopen": {
+        "name": "Antriebsstrang Traktions Batterie Laden Anschluss Hinten Rechts Klappe Is Offen"
+      },
+      "vehicle_powertrain_tractionbattery_charging_port_frontmiddle_isplugged": {
+        "name": "Antriebsstrang Traktions Batterie Laden Anschluss Vorne Mitte Is Eingesteckt"
+      },
+      "vehicle_powertrain_tractionbattery_charging_port_rearmiddle_isplugged": {
+        "name": "Antriebsstrang Traktions Batterie Laden Anschluss Hinten Mitte Is Eingesteckt"
+      },
+      "vehicle_powertrain_electric_range_displaycontrol": {
+        "name": "Antriebsstrang Elektro Reichweite Anzeige Kontrolle"
+      },
+      "vehicle_powertrain_electric_chargingduration_displaycontrol": {
+        "name": "Antriebsstrang Elektro Laden Dauer Anzeige Kontrolle"
+      },
+      "vehicle_powertrain_electric_departuretime_displaycontrol": {
+        "name": "Antriebsstrang Elektro Abfahrt Zeit Anzeige Kontrolle"
+      },
+      "vehicle_drivetrain_electricengine_charging_profile_timertype": {
+        "name": "Antrieb Elektro Motor Laden Profil Timer Typ"
+      },
+      "vehicle_drivetrain_electricengine_charging_profile_climatizationactive": {
+        "name": "Antrieb Elektro Motor Laden Profil Klimatisierung Aktiv"
+      },
+      "vehicle_drivetrain_electricengine_charging_smeenergydeltafullycharged": {
+        "name": "Antrieb Elektro Motor Laden Sme Energie Delta Fully Charged"
+      },
+      "vehicle_drivetrain_electricengine_charging_reasonchargingend": {
+        "name": "Antrieb Elektro Motor Laden Grund Laden Ende"
+      },
+      "vehicle_drivetrain_electricengine_charging_hvpmfinishreason": {
+        "name": "Antrieb Elektro Motor Laden Hvpm Finish Grund"
+      },
+      "vehicle_drivetrain_electricengine_charging_hvstatus": {
+        "name": "Antrieb Elektro Motor Laden Hv Status"
+      },
+      "vehicle_drivetrain_electricengine_charging_routeoptimizedchargingstatus": {
+        "name": "Antrieb Elektro Motor Laden Route Optimiert Laden Status"
+      },
+      "vehicle_cabin_seat_row1_driverside_cooling": {
+        "name": "Innenraum Sitz Reihe 1 Fahrer Side Kühlung"
+      },
+      "vehicle_cabin_seat_row1_passengerside_cooling": {
+        "name": "Innenraum Sitz Reihe 1 Beifahrer Side Kühlung"
+      },
+      "vehicle_cabin_seat_row2_driverside_cooling": {
+        "name": "Innenraum Sitz Reihe 2 Fahrer Side Kühlung"
+      },
+      "vehicle_cabin_seat_row2_passengerside_cooling": {
+        "name": "Innenraum Sitz Reihe 2 Beifahrer Side Kühlung"
+      },
+      "vehicle_cabin_seat_row3_driverside_cooling": {
+        "name": "Innenraum Sitz Reihe 3 Fahrer Side Kühlung"
+      },
+      "vehicle_cabin_seat_row3_driverside_heating": {
+        "name": "Innenraum Sitz Reihe 3 Fahrer Side Heizung"
+      },
+      "vehicle_cabin_seat_row3_passengerside_cooling": {
+        "name": "Innenraum Sitz Reihe 3 Beifahrer Side Kühlung"
+      },
+      "vehicle_cabin_seat_row3_passengerside_heating": {
+        "name": "Innenraum Sitz Reihe 3 Beifahrer Side Heizung"
+      },
+      "vehicle_drivetrain_fuelsystem_consumptionoverlifetime_overall_fuel": {
+        "name": "Antrieb Kraftstoff System Verbrauch Over Life Zeit Gesamt Kraftstoff"
+      },
+      "vehicle_drivetrain_fuelsystem_consumptionoverlifetime_overall_referencedistance": {
+        "name": "Antrieb Kraftstoff System Verbrauch Over Life Zeit Gesamt Referenz Strecke"
+      },
+      "vehicle_privacysettings_datacollection_regulations_obfcm": {
+        "name": "Datenschutz Einstellungen Daten Sammlung Vorschriften OBFCM"
+      },
+      "vehicle_vehicleidentification_connecteddrivecontractlist": {
+        "name": "Identifikation Verbunden Fahren Vertrag Liste"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_isremoteenginestartdisclaimer": {
+        "name": "Innenraum Klima Vorklimatisierung Konfiguration Is Fern Motor Start Hinweis"
+      },
+      "vehicle_body_chargingport_isosessionid": {
+        "name": "Ladeanschluss ISO Sitzungs-ID"
+      },
+      "vehicle_body_chargingport_plugeventid": {
+        "name": "Ladeanschluss Stecker Ereignis-ID"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_defaultsettings_seat_row1_driverside_cooling": {
+        "name": "Klima Vorklimatisierung Standard Sitz Reihe1 Fahrer Kühlung"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_defaultsettings_seat_row1_driverside_heating": {
+        "name": "Klima Vorklimatisierung Standard Sitz Reihe1 Fahrer Heizung"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_defaultsettings_seat_row1_passengerside_cooling": {
+        "name": "Klima Vorklimatisierung Standard Sitz Reihe1 Beifahrer Kühlung"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_defaultsettings_seat_row1_passengerside_heating": {
+        "name": "Klima Vorklimatisierung Standard Sitz Reihe1 Beifahrer Heizung"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_defaultsettings_seat_row2_driverside_cooling": {
+        "name": "Klima Vorklimatisierung Standard Sitz Reihe2 Fahrer Kühlung"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_defaultsettings_seat_row2_driverside_heating": {
+        "name": "Klima Vorklimatisierung Standard Sitz Reihe2 Fahrer Heizung"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_defaultsettings_seat_row2_passengerside_cooling": {
+        "name": "Klima Vorklimatisierung Standard Sitz Reihe2 Beifahrer Kühlung"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_defaultsettings_seat_row2_passengerside_heating": {
+        "name": "Klima Vorklimatisierung Standard Sitz Reihe2 Beifahrer Heizung"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_defaultsettings_seat_row3_driverside_cooling": {
+        "name": "Klima Vorklimatisierung Standard Sitz Reihe3 Fahrer Kühlung"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_defaultsettings_seat_row3_driverside_heating": {
+        "name": "Klima Vorklimatisierung Standard Sitz Reihe3 Fahrer Heizung"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_defaultsettings_seat_row3_passengerside_cooling": {
+        "name": "Klima Vorklimatisierung Standard Sitz Reihe3 Beifahrer Kühlung"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_defaultsettings_seat_row3_passengerside_heating": {
+        "name": "Klima Vorklimatisierung Standard Sitz Reihe3 Beifahrer Heizung"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_defaultsettings_steeringwheel_heating": {
+        "name": "Klima Vorklimatisierung Standard Lenkrad Heizung"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_directstartsettings_seat_row1_driverside_cooling": {
+        "name": "Klima Direct Start Sitz Reihe1 Fahrer Kühlung"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_directstartsettings_seat_row1_driverside_heating": {
+        "name": "Klima Direct Start Sitz Reihe1 Fahrer Heizung"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_directstartsettings_seat_row1_passengerside_cooling": {
+        "name": "Klima Direct Start Sitz Reihe1 Beifahrer Kühlung"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_directstartsettings_seat_row1_passengerside_heating": {
+        "name": "Klima Direct Start Sitz Reihe1 Beifahrer Heizung"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_directstartsettings_seat_row2_driverside_cooling": {
+        "name": "Klima Direct Start Sitz Reihe2 Fahrer Kühlung"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_directstartsettings_seat_row2_driverside_heating": {
+        "name": "Klima Direct Start Sitz Reihe2 Fahrer Heizung"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_directstartsettings_seat_row2_passengerside_cooling": {
+        "name": "Klima Direct Start Sitz Reihe2 Beifahrer Kühlung"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_directstartsettings_seat_row2_passengerside_heating": {
+        "name": "Klima Direct Start Sitz Reihe2 Beifahrer Heizung"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_directstartsettings_seat_row3_driverside_cooling": {
+        "name": "Klima Direct Start Sitz Reihe3 Fahrer Kühlung"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_directstartsettings_seat_row3_driverside_heating": {
+        "name": "Klima Direct Start Sitz Reihe3 Fahrer Heizung"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_directstartsettings_seat_row3_passengerside_cooling": {
+        "name": "Klima Direct Start Sitz Reihe3 Beifahrer Kühlung"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_directstartsettings_seat_row3_passengerside_heating": {
+        "name": "Klima Direct Start Sitz Reihe3 Beifahrer Heizung"
+      },
+      "vehicle_cabin_hvac_preconditioning_configuration_directstartsettings_steeringwheel_heating": {
+        "name": "Klima Direct Start Lenkrad Heizung"
+      },
+      "vehicle_cabin_hvac_preconditioning_status_isexteriormirrorheatingactive": {
+        "name": "Klima Vorklimatisierung Außenspiegel Heizung aktiv"
+      },
+      "vehicle_channel_ista_obfcm_lasttransmissionstatus": {
+        "name": "Kanal ISTA OBFCM Letzter Übertragungsstatus"
+      },
+      "vehicle_drivetrain_electricengine_charging_acrestriction_factor": {
+        "name": "Antrieb Elektromotor Laden AC Drosselung Faktor"
+      },
+      "vehicle_drivetrain_electricengine_charging_authentication_status": {
+        "name": "Antrieb Elektromotor Laden Authentifizierung Status"
+      },
+      "vehicle_drivetrain_electricengine_charging_consumptionoverlifetime_engineoff_gridenergy": {
+        "name": "Antrieb Elektromotor Laden Verbrauch Motor aus Netzenergie"
+      },
+      "vehicle_drivetrain_electricengine_charging_consumptionoverlifetime_engineoff_referencedistance": {
+        "name": "Antrieb Elektromotor Laden Verbrauch Motor aus Referenzstrecke"
+      },
+      "vehicle_drivetrain_electricengine_charging_consumptionoverlifetime_engineon_gridenergy": {
+        "name": "Antrieb Elektromotor Laden Verbrauch Motor an Netzenergie"
+      },
+      "vehicle_drivetrain_electricengine_charging_consumptionoverlifetime_engineon_referencedistance": {
+        "name": "Antrieb Elektromotor Laden Verbrauch Motor an Referenzstrecke"
+      },
+      "vehicle_drivetrain_electricengine_charging_consumptionoverlifetime_overall_gridenergy": {
+        "name": "Antrieb Elektromotor Laden Verbrauch Gesamt Netzenergie"
+      },
+      "vehicle_drivetrain_electricengine_charging_consumptionoverlifetime_overall_referencedistance": {
+        "name": "Antrieb Elektromotor Laden Verbrauch Gesamt Referenzstrecke"
+      },
+      "vehicle_drivetrain_electricengine_charging_isimmediatechargingsystemreason": {
+        "name": "Antrieb Elektromotor Laden Sofortlade Grund"
+      },
+      "vehicle_drivetrain_electricengine_charging_lastchargingreason": {
+        "name": "Antrieb Elektromotor Laden Letzter Ladegrund"
+      },
+      "vehicle_drivetrain_electricengine_charging_lastchargingresult": {
+        "name": "Antrieb Elektromotor Laden Letztes Ladeergebnis"
+      },
+      "vehicle_drivetrain_electricengine_charging_modedeviation": {
+        "name": "Antrieb Elektromotor Laden Modus Abweichung"
+      },
+      "vehicle_drivetrain_electricengine_charging_profile_settings_bidirectionalcharging_departuretimerelevant": {
+        "name": "Antrieb Elektromotor Laden Profil Bidirektional Abfahrt relevant"
+      },
+      "vehicle_drivetrain_electricengine_charging_profile_settings_bidirectionalcharging_dischargeallowed": {
+        "name": "Antrieb Elektromotor Laden Profil Bidirektional Entladung erlaubt"
+      },
+      "vehicle_drivetrain_electricengine_charging_windowselection": {
+        "name": "Antrieb Elektromotor Laden Fenster Auswahl"
+      },
+      "vehicle_drivetrain_fuelsystem_consumptionoverlifetime_inchargedepleting_fuel": {
+        "name": "Antrieb Kraftstoff Verbrauch Ladedepletion Kraftstoff"
+      },
+      "vehicle_drivetrain_fuelsystem_consumptionoverlifetime_inchargedepleting_referencedistanceengineoff": {
+        "name": "Antrieb Kraftstoff Verbrauch Ladedepletion Referenzstrecke Motor aus"
+      },
+      "vehicle_drivetrain_fuelsystem_consumptionoverlifetime_inchargedepleting_referencedistanceengineon": {
+        "name": "Antrieb Kraftstoff Verbrauch Ladedepletion Referenzstrecke Motor an"
+      },
+      "vehicle_drivetrain_fuelsystem_consumptionoverlifetime_inchargeincreasing_fuel": {
+        "name": "Antrieb Kraftstoff Verbrauch Ladesteigerung Kraftstoff"
+      },
+      "vehicle_drivetrain_fuelsystem_consumptionoverlifetime_inchargeincreasing_referencedistance": {
+        "name": "Antrieb Kraftstoff Verbrauch Ladesteigerung Referenzstrecke"
+      },
+      "vehicle_electroniccontrolunit_diagnostictroublecodes_raw": {
+        "name": "Steuergerät Diagnose Fehlercodes Rohdaten"
+      },
+      "vehicle_extras_optionalequipment_code": {
+        "name": "Extras Sonderausstattung Code"
+      },
+      "vehicle_look_image": {
+        "name": "Aussehen Bild"
+      },
+      "vehicle_powertrain_electric_battery_bidirectionalcharging_availability": {
+        "name": "Antriebsstrang Batterie Bidirektionales Laden Verfügbarkeit"
+      },
+      "vehicle_powertrain_electric_battery_charging_authenticationstatus": {
+        "name": "Antriebsstrang Batterie Laden Authentifizierung Status"
+      },
+      "vehicle_powertrain_electric_battery_charging_batterycarepersisted_isactive": {
+        "name": "Antriebsstrang Batterie Laden Batteriepflege aktiv"
+      },
+      "vehicle_powertrain_electric_battery_charging_batterycarepersisted_ispreservingchargingmode": {
+        "name": "Antriebsstrang Batterie Laden Batteriepflege Schonmodus"
+      },
+      "vehicle_powertrain_electric_battery_charging_batterycarepersisted_isreducedtargetsoe": {
+        "name": "Antriebsstrang Batterie Laden Batteriepflege Reduziertes Ladeziel"
+      },
+      "vehicle_powertrain_electric_battery_charging_cablecheckvoltage": {
+        "name": "Antriebsstrang Batterie Laden Kabelprüfung Spannung"
+      },
+      "vehicle_powertrain_electric_battery_charging_dcchargingmodeactive": {
+        "name": "Antriebsstrang Batterie Laden DC Lademodus aktiv"
+      },
+      "vehicle_powertrain_electric_battery_charging_history_sessionslist": {
+        "name": "Antriebsstrang Batterie Laden Verlauf Sitzungsliste"
+      },
+      "vehicle_powertrain_electric_battery_charging_settingslist": {
+        "name": "Antriebsstrang Batterie Laden Einstellungsliste"
+      },
+      "vehicle_powertrain_electric_battery_preconditioning_automaticmode_statusfeedback": {
+        "name": "Antriebsstrang Batterie Vorkonditionierung Automatik Status"
+      },
+      "vehicle_powertrain_electric_battery_preconditioning_manualmode_statusfeedback": {
+        "name": "Antriebsstrang Batterie Vorkonditionierung Manuell Status"
+      },
+      "vehicle_powertrain_electric_battery_stateofcharge_targetmin": {
+        "name": "Antriebsstrang Batterie Ladezustand Ziel Minimum"
+      },
+      "vehicle_powertrain_electric_battery_stateofcharge_targetsocforprofessionalmode": {
+        "name": "Antriebsstrang Batterie Ladezustand Ziel Profi-Modus"
+      },
+      "vehicle_powertrain_electric_battery_stateofhealth_displayed": {
+        "name": "Antriebsstrang Batterie Gesundheitszustand angezeigt"
+      },
+      "vehicle_powertrain_tractionbattery_charging_port_frontleft_flap_isautomaticopenandcloseactive": {
+        "name": "Antriebsstrang Traktionsbatterie Ladeklappe vorn links automatisch"
+      },
+      "vehicle_powertrain_tractionbattery_charging_port_frontmiddle_flap_isautomaticopenandcloseactive": {
+        "name": "Antriebsstrang Traktionsbatterie Ladeklappe vorn Mitte automatisch"
+      },
+      "vehicle_powertrain_tractionbattery_charging_port_frontmiddle_flap_isopen": {
+        "name": "Antriebsstrang Traktionsbatterie Ladeklappe vorn Mitte offen"
+      },
+      "vehicle_powertrain_tractionbattery_charging_port_frontright_flap_isautomaticopenandcloseactive": {
+        "name": "Antriebsstrang Traktionsbatterie Ladeklappe vorn rechts automatisch"
+      },
+      "vehicle_powertrain_tractionbattery_charging_port_rearleft_flap_isautomaticopenandcloseactive": {
+        "name": "Antriebsstrang Traktionsbatterie Ladeklappe hinten links automatisch"
+      },
+      "vehicle_powertrain_tractionbattery_charging_port_rearmiddle_flap_isautomaticopenandcloseactive": {
+        "name": "Antriebsstrang Traktionsbatterie Ladeklappe hinten Mitte automatisch"
+      },
+      "vehicle_powertrain_tractionbattery_charging_port_rearmiddle_flap_isopen": {
+        "name": "Antriebsstrang Traktionsbatterie Ladeklappe hinten Mitte offen"
+      },
+      "vehicle_powertrain_tractionbattery_charging_port_rearright_flap_isautomaticopenandcloseactive": {
+        "name": "Antriebsstrang Traktionsbatterie Ladeklappe hinten rechts automatisch"
+      },
+      "vehicle_trip_segment_accumulated_drivetrain_electricengine_recuperationtotal": {
+        "name": "Fahrt Abschnitt Antrieb Elektromotor Rekuperation gesamt"
+      },
+      "vehicle_vehicleidentification_basicvehicledata": {
+        "name": "Identifikation Basisdaten"
+      },
+      "status": {
+        "name": "Status",
+        "state": {
+          "Connected": "Verbunden",
+          "Disconnected": "Getrennt"
+        }
+      },
+      "vin": {
+        "name": "Fahrgestellnummer"
+      }
+    },
+    "binary_sensor": {
+      "cardata_stream": {
+        "name": "CarData-Stream",
+        "state": {
+          "on": "Verbunden",
+          "off": "Getrennt"
+        }
+      }
+    },
+    "device_tracker": {
+      "vehicle": {
+        "name": "Fahrzeug"
+      }
+    }
+  }
+}
