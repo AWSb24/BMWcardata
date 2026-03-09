@@ -1,3 +1,0 @@
-request_refresh:
-  name: Request refresh
-  description: Reconnect to the BMW CarData stream to trigger a fresh data push. Use after Home Assistant starts or when you want updated vehicle data.
