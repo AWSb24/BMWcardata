@@ -10,17 +10,12 @@ My target is to create an integration which is easy to use and supports all reqi
 
 - Simple configuration VIN+ClientID+GCID which all available in the CarStream menu at BMW or Mini Website
 - Support of multiple vehicle with one account and multipe accounts with one vehicle (each vehicle creates its own device with multiple entities/sensor)
-- No preconfiguration of any sensor in Home Assistant. The sensor will appear if configured in the CarStream and the vehicle is awake.
-
-
-
-
-
-Direct Home Assistant integration for [BMW CarData](https://github.com/dj0abr/bmw-mqtt-bridge) streaming. **No MQTT broker required** – the integration connects to BMW's CarData MQTT stream and exposes vehicle data as sensors.
+- No preconfiguration of any sensor in Home Assistant. The sensor will appear if selected in the CarStream and the vehicle is awake
+- 248 keys/sensors supported for BMW and MIni
 
 ## Installation
 
-1. Copy the `custom_components/bmw_cardata` folder into your Home Assistant `custom_components` directory.
+1. Copy the `bmw_cardata` folder into your Home Assistant `custom_components` directory.
 2. Restart Home Assistant.
 3. Go to **Settings** → **Devices & services** → **Add integration** and search for **BMW CarData**.
 
