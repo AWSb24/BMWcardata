@@ -43,6 +43,19 @@ KEY_DEVICE_CLASS_NORMALIZED = {k.lower(): v for k, v in KEY_DEVICE_CLASS.items()
 KEY_STATE_CLASS_NORMALIZED = {k.lower(): v for k, v in KEY_STATE_CLASS.items()}
 
 
+def _has_usable_value(value: Any) -> bool:
+    """True if a signal has a real value worth creating an entity for.
+
+    Treats None and empty/whitespace strings as "not available", but keeps
+    falsy-but-valid values such as 0, 0.0 and False.
+    """
+    if value is None:
+        return False
+    if isinstance(value, str) and not value.strip():
+        return False
+    return True
+
+
 def _entity_translation_key(platform: str, translation_key: str) -> str:
     """Build the flat translation key used by async_get_translations."""
     return f"component.{DOMAIN}.entity.{platform}.{translation_key}.name"
@@ -143,6 +156,12 @@ async def async_setup_entry(
         for key in store.get_vin_keys(vin):
             key_lower = key.lower()
             if (vin, key_lower) in existing:
+                continue
+            # Skip signals that are not (yet) available: no entity is created for
+            # a null/empty value. It is created later once a real value arrives,
+            # because the key is not marked as existing here.
+            row = store.get(vin, key)
+            if not row or not _has_usable_value(row[0]):
                 continue
             existing.add((vin, key_lower))
             entities.append(
