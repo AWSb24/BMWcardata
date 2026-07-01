@@ -29,6 +29,13 @@
         "title": "BMW-Anmeldung abschließen",
         "description": "**Verifizierungs-URL:**\n\n{verification_url}\n\nBitte öffnen Sie den Link oben in Ihrem Browser und melden Sie sich mit Ihrem BMW-Konto an. Wenn \"Anmeldung erfolgreich\" angezeigt wird, kehren Sie hierher zurück und klicken Sie auf **Weiter**.",
         "data": {}
+      },
+      "mode": {
+        "title": "Datenquelle",
+        "description": "Wählen Sie, wie Fahrzeugdaten abgerufen werden:\n- **mqtt**: Echtzeit-MQTT-Stream (Standard)\n- **api**: periodisches REST-API-Polling (max. 50 Aufrufe/Tag)\n- **mixed**: MQTT für Echtzeit plus API-Polling",
+        "data": {
+          "mode": "Modus"
+        }
       }
     }
   },
@@ -36,7 +43,10 @@
     "step": {
       "init": {
         "title": "BMW CarData erneut anmelden",
-        "description": "Melden Sie Ihr BMW-Konto erneut an, um die Verbindung zu aktualisieren. Klicken Sie auf **Weiter**, um im nächsten Schritt einen Verifizierungslink zu öffnen."
+        "menu_options": {
+          "settings": "Einstellungen ändern (API-Poll-Intervall)",
+          "reauth": "Neu authentifizieren"
+        }
       },
       "reauth_verify": {
         "title": "BMW-Anmeldung bestätigen",
@@ -45,6 +55,12 @@
       "reauth_success": {
         "title": "Erneute Anmeldung erfolgreich",
         "description": "Ihre BMW CarData-Verbindung wurde aktualisiert. Sie können dieses Fenster schließen."
+      },
+      "settings": {
+        "title": "API-Einstellungen",
+        "data": {
+          "api_poll_interval": "API-Poll-Intervall (Minuten)"
+        }
       }
     },
     "abort": {

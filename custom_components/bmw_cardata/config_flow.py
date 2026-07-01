@@ -10,6 +10,7 @@ import re
 import secrets
 import time
 import uuid
+from datetime import timedelta
 from typing import Any
 
 import voluptuous as vol
@@ -30,6 +31,15 @@ from .const import (
     CONF_REFRESH_TOKEN,
     CONF_ID_TOKEN,
     CONF_TOKEN_EXPIRES,
+    CONF_MODE,
+    CONF_API_POLL_INTERVAL,
+    API_POLL_DEFAULT_MINUTES,
+    API_POLL_MIN_MINUTES,
+    DEFAULT_MODE,
+    MODE_MQTT,
+    MODE_API,
+    MODE_MIXED,
+    scopes_for_mode,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -73,13 +83,13 @@ def _pkce_code_challenge(verifier: str) -> str:
 
 
 async def _request_device_code(
-    hass: HomeAssistant, client_id: str, code_challenge: str
+    hass: HomeAssistant, client_id: str, code_challenge: str, scope: str = BMW_SCOPES
 ) -> dict[str, Any] | None:
     """Request device code from BMW OAuth."""
     session = aiohttp_client.async_get_clientsession(hass)
     data = {
         "client_id": client_id,
-        "scope": BMW_SCOPES,
+        "scope": scope,
         "code_challenge": code_challenge,
         "code_challenge_method": "S256",
     }
@@ -146,6 +156,7 @@ class BMWCarDataConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         self._vin: str | None = None
         self._client_id: str | None = None
         self._gcid: str | None = None
+        self._mode: str = DEFAULT_MODE
 
     @staticmethod
     @callback
@@ -189,6 +200,8 @@ class BMWCarDataConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     gcid = (entry.data.get(CONF_GCID) or "").strip()
                     await self.async_set_unique_id(f"{gcid}_{vin}".lower())
                     self._abort_if_unique_id_configured()
+                    # Reuse the existing entry's mode; its tokens already carry the
+                    # matching scopes, so we cannot silently upgrade to API here.
                     return self.async_create_entry(
                         title=f"BMW CarData ({vin[:8]}…)",
                         data={
@@ -199,6 +212,10 @@ class BMWCarDataConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                             CONF_REFRESH_TOKEN: entry.data.get(CONF_REFRESH_TOKEN, ""),
                             CONF_ACCESS_TOKEN: entry.data.get(CONF_ACCESS_TOKEN, ""),
                             CONF_TOKEN_EXPIRES: entry.data.get(CONF_TOKEN_EXPIRES, 0),
+                            CONF_MODE: entry.data.get(CONF_MODE, DEFAULT_MODE),
+                            CONF_API_POLL_INTERVAL: entry.data.get(
+                                CONF_API_POLL_INTERVAL, API_POLL_DEFAULT_MINUTES
+                            ),
                         },
                     )
             else:
@@ -206,7 +223,7 @@ class BMWCarDataConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     errors["base"] = "invalid_vin"
                 else:
                     self._vin = vin_raw.upper()
-                    return await self.async_step_credentials(None)
+                    return await self.async_step_mode()
 
         return self.async_show_form(
             step_id="vin",
@@ -221,6 +238,25 @@ class BMWCarDataConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             ),
             errors=errors,
             description_placeholders={},
+        )
+
+    async def async_step_mode(
+        self, user_input: dict[str, Any] | None = None
+    ) -> FlowResult:
+        """Let the user choose the data source: MQTT, API or Mixed."""
+        if user_input is not None:
+            self._mode = user_input.get(CONF_MODE, DEFAULT_MODE)
+            return await self.async_step_credentials(None)
+
+        return self.async_show_form(
+            step_id="mode",
+            data_schema=vol.Schema(
+                {
+                    vol.Required(CONF_MODE, default=DEFAULT_MODE): vol.In(
+                        [MODE_MQTT, MODE_API, MODE_MIXED]
+                    ),
+                }
+            ),
         )
 
     async def async_step_credentials(
@@ -245,7 +281,7 @@ class BMWCarDataConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 code_verifier = _pkce_code_verifier()
                 code_challenge = _pkce_code_challenge(code_verifier)
                 device_resp = await _request_device_code(
-                    self.hass, self._client_id, code_challenge
+                    self.hass, self._client_id, code_challenge, scopes_for_mode(self._mode)
                 )
                 if not device_resp or "device_code" not in device_resp:
                     errors["base"] = "device_flow_failed"
@@ -329,6 +365,8 @@ class BMWCarDataConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     CONF_REFRESH_TOKEN: refresh_token,
                     CONF_ACCESS_TOKEN: access_token,
                     CONF_TOKEN_EXPIRES: token_expires,
+                    CONF_MODE: self._mode,
+                    CONF_API_POLL_INTERVAL: API_POLL_DEFAULT_MINUTES,
                 },
             )
 
@@ -356,42 +394,74 @@ class BMWCarDataOptionsFlowHandler(config_entries.OptionsFlow):
     async def async_step_init(
         self, user_input: dict[str, Any] | None = None
     ) -> FlowResult:
-        """Ask user if they want to reauthenticate, then request device code and go to verification step."""
-        if user_input is not None:
-            entry = self.config_entry
-            data = entry.data
-            client_id = (data.get(CONF_CLIENT_ID) or "").strip()
-            gcid = (data.get(CONF_GCID) or "").strip()
-            if not client_id or not gcid:
-                return self.async_abort(reason="cannot_connect")
-            code_verifier = _pkce_code_verifier()
-            code_challenge = _pkce_code_challenge(code_verifier)
-            device_resp = await _request_device_code(self.hass, client_id, code_challenge)
-            if not device_resp or "device_code" not in device_resp:
-                return self.async_show_form(
-                    step_id="init",
-                    data_schema=vol.Schema({}),
-                    errors={"base": "device_flow_failed"},
-                )
-            self._device_code = device_resp["device_code"]
-            self._code_verifier = code_verifier
-            self._verification_uri_complete = device_resp.get(
-                "verification_uri_complete"
-            ) or (
-                device_resp.get("verification_uri", "")
-                + "?user_code="
-                + device_resp.get("user_code", "")
-            )
-            self._interval = int(device_resp.get("interval", 5))
-            self._expires_in = int(
-                device_resp.get("expires_in", _DEVICE_CODE_DEFAULT_EXPIRY)
-            )
-            return await self.async_step_reauth_verify()
+        """Options menu: change settings (poll interval) or reauthenticate."""
+        return self.async_show_menu(step_id="init", menu_options=["settings", "reauth"])
 
-        return self.async_show_form(
-            step_id="init",
-            data_schema=vol.Schema({}),
+    async def async_step_settings(
+        self, user_input: dict[str, Any] | None = None
+    ) -> FlowResult:
+        """Configure the REST API poll interval (minutes; floored to the API minimum)."""
+        entry = self.config_entry
+        if user_input is not None:
+            minutes = max(
+                int(user_input[CONF_API_POLL_INTERVAL]), API_POLL_MIN_MINUTES
+            )
+            # Apply immediately to a running coordinator; also persisted in options.
+            entry_data = self.hass.data.get(DOMAIN, {}).get(entry.entry_id)
+            coordinator = entry_data.get("api_coordinator") if entry_data else None
+            if coordinator is not None:
+                coordinator.update_interval = timedelta(minutes=minutes)
+            return self.async_create_entry(
+                title="", data={CONF_API_POLL_INTERVAL: minutes}
+            )
+
+        current = entry.options.get(
+            CONF_API_POLL_INTERVAL,
+            entry.data.get(CONF_API_POLL_INTERVAL, API_POLL_DEFAULT_MINUTES),
         )
+        return self.async_show_form(
+            step_id="settings",
+            data_schema=vol.Schema(
+                {
+                    vol.Required(
+                        CONF_API_POLL_INTERVAL, default=current
+                    ): vol.All(vol.Coerce(int), vol.Clamp(min=API_POLL_MIN_MINUTES)),
+                }
+            ),
+        )
+
+    async def async_step_reauth(
+        self, user_input: dict[str, Any] | None = None
+    ) -> FlowResult:
+        """Request a device code and go to the verification step."""
+        entry = self.config_entry
+        data = entry.data
+        client_id = (data.get(CONF_CLIENT_ID) or "").strip()
+        gcid = (data.get(CONF_GCID) or "").strip()
+        if not client_id or not gcid:
+            return self.async_abort(reason="cannot_connect")
+        code_verifier = _pkce_code_verifier()
+        code_challenge = _pkce_code_challenge(code_verifier)
+        scope = scopes_for_mode(data.get(CONF_MODE, DEFAULT_MODE))
+        device_resp = await _request_device_code(
+            self.hass, client_id, code_challenge, scope
+        )
+        if not device_resp or "device_code" not in device_resp:
+            return self.async_abort(reason="cannot_connect")
+        self._device_code = device_resp["device_code"]
+        self._code_verifier = code_verifier
+        self._verification_uri_complete = device_resp.get(
+            "verification_uri_complete"
+        ) or (
+            device_resp.get("verification_uri", "")
+            + "?user_code="
+            + device_resp.get("user_code", "")
+        )
+        self._interval = int(device_resp.get("interval", 5))
+        self._expires_in = int(
+            device_resp.get("expires_in", _DEVICE_CODE_DEFAULT_EXPIRY)
+        )
+        return await self.async_step_reauth_verify()
 
     async def async_step_reauth_verify(
         self, user_input: dict[str, Any] | None = None
