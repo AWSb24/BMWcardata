@@ -50,6 +50,11 @@ class ConnectionCoordinator(DataUpdateCoordinator[bool]):
         self._entry_data = entry_data
         self._connected = False
 
+    @property
+    def entry_data(self) -> dict:
+        """Shared per-entry data (store, client, ...)."""
+        return self._entry_data
+
     @callback
     def async_set_connected(self, connected: bool) -> None:
         """Update connection state (called from dispatcher)."""
@@ -81,8 +86,8 @@ class BMWCarDataConnectionSensor(BinarySensorEntity):
         self._attr_unique_id = f"{config_entry.entry_id}_connection"
         gcid = (config_entry.data.get(CONF_GCID) or "").strip()
         vin = (config_entry.data.get(CONF_VIN) or "").strip()
-        if not vin and coordinator._entry_data:
-            store = coordinator._entry_data.get("store")
+        if not vin and coordinator.entry_data:
+            store = coordinator.entry_data.get("store")
             vin = store.all_vins()[0] if (store and store.all_vins()) else None
         self._attr_device_info = {
             "identifiers": {(DOMAIN, config_entry.entry_id)},
@@ -114,8 +119,8 @@ class BMWCarDataConnectionSensor(BinarySensorEntity):
                 if name := trans.get(key):
                     self._attr_name = name
         except Exception:
-            pass
-        client = self._coordinator._entry_data.get("client")
+            _LOGGER.debug("Failed to load translated binary sensor name", exc_info=True)
+        client = self._coordinator.entry_data.get("client")
         if client and hasattr(client, "is_connected"):
             self._coordinator.async_set_connected(client.is_connected)
         self.async_on_remove(

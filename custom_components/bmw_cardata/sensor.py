@@ -73,7 +73,7 @@ async def _resolve_entity_name(
             if name:
                 return _strip_vehicle_prefix(name)
     except Exception:
-        pass
+        _LOGGER.debug("Failed to resolve translated name for %s", translation_key, exc_info=True)
     return _strip_vehicle_prefix(fallback)
 
 
@@ -128,7 +128,7 @@ async def async_setup_entry(
             if device:
                 dev_reg.async_update_device(device.id, name=get_device_name(gcid, vin))
         except Exception:
-            pass
+            _LOGGER.debug("Failed to update device name", exc_info=True)
 
     def _vin_matches(vin: str) -> bool:
         """Only add entities for the configured VIN."""

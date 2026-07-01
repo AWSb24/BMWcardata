@@ -94,17 +94,6 @@ class BMWCarDataClient:
         with self._lock:
             return self._id_token
 
-    def _set_tokens(
-        self, id_token: str, refresh_token: str, token_expires: int
-    ) -> None:
-        pass  # unused; refresh is done in integration
-
-    def _maybe_refresh(self) -> bool:
-        return True  # refresh is done in integration
-
-    def _do_refresh(self) -> bool:
-        return True
-
     def _on_connect(
         self, _client: mqtt.Client, _userdata: Any, _flags: Any, rc: int, *args: Any
     ) -> None:
@@ -133,7 +122,8 @@ class BMWCarDataClient:
         try:
             topic = msg.topic
             payload = msg.payload.decode("utf-8") if msg.payload else "{}"
-            _LOGGER.debug("MQTT message: topic=%s payload=%s", topic, payload)
+            # Payload may contain the vehicle's GPS position; log only its size, not its content.
+            _LOGGER.debug("MQTT message: topic=%s payload_bytes=%d", topic, len(payload))
             data = json.loads(payload)
             vin = data.get("vin") or ""
             if not vin and "/" in topic:
@@ -147,7 +137,7 @@ class BMWCarDataClient:
                     event_name = parts[2]
             self._on_message(vin, event_name, data)
         except Exception:
-            pass
+            _LOGGER.debug("Failed to process MQTT message on topic %s", msg.topic, exc_info=True)
 
     def _create_client(self) -> mqtt.Client:
         with self._lock:
