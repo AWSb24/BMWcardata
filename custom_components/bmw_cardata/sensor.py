@@ -43,6 +43,19 @@ KEY_DEVICE_CLASS_NORMALIZED = {k.lower(): v for k, v in KEY_DEVICE_CLASS.items()
 KEY_STATE_CLASS_NORMALIZED = {k.lower(): v for k, v in KEY_STATE_CLASS.items()}
 
 
+def _has_usable_value(value: Any) -> bool:
+    """True if a signal has a real value worth creating an entity for.
+
+    Treats None and empty/whitespace strings as "not available", but keeps
+    falsy-but-valid values such as 0, 0.0 and False.
+    """
+    if value is None:
+        return False
+    if isinstance(value, str) and not value.strip():
+        return False
+    return True
+
+
 def _entity_translation_key(platform: str, translation_key: str) -> str:
     """Build the flat translation key used by async_get_translations."""
     return f"component.{DOMAIN}.entity.{platform}.{translation_key}.name"
@@ -73,7 +86,7 @@ async def _resolve_entity_name(
             if name:
                 return _strip_vehicle_prefix(name)
     except Exception:
-        pass
+        _LOGGER.debug("Failed to resolve translated name for %s", translation_key, exc_info=True)
     return _strip_vehicle_prefix(fallback)
 
 
@@ -128,7 +141,7 @@ async def async_setup_entry(
             if device:
                 dev_reg.async_update_device(device.id, name=get_device_name(gcid, vin))
         except Exception:
-            pass
+            _LOGGER.debug("Failed to update device name", exc_info=True)
 
     def _vin_matches(vin: str) -> bool:
         """Only add entities for the configured VIN."""
@@ -143,6 +156,12 @@ async def async_setup_entry(
         for key in store.get_vin_keys(vin):
             key_lower = key.lower()
             if (vin, key_lower) in existing:
+                continue
+            # Skip signals that are not (yet) available: no entity is created for
+            # a null/empty value. It is created later once a real value arrives,
+            # because the key is not marked as existing here.
+            row = store.get(vin, key)
+            if not row or not _has_usable_value(row[0]):
                 continue
             existing.add((vin, key_lower))
             entities.append(

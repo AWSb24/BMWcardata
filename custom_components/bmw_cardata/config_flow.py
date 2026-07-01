@@ -2,10 +2,13 @@
 
 from __future__ import annotations
 
+import asyncio
 import hashlib
 import base64
+import logging
 import re
 import secrets
+import time
 import uuid
 from typing import Any
 
@@ -28,6 +31,11 @@ from .const import (
     CONF_ID_TOKEN,
     CONF_TOKEN_EXPIRES,
 )
+
+_LOGGER = logging.getLogger(__name__)
+
+# Fallback lifetime (seconds) for the device code if the server omits expires_in.
+_DEVICE_CODE_DEFAULT_EXPIRY = 300
 
 
 def _is_placeholder_uuid(value: str) -> bool:
@@ -91,9 +99,9 @@ async def _poll_token(
     device_code: str,
     code_verifier: str,
     interval: int,
+    expires_in: int = _DEVICE_CODE_DEFAULT_EXPIRY,
 ) -> dict[str, Any] | None:
-    """Poll token endpoint until user authorizes or error."""
-    import asyncio
+    """Poll token endpoint until the user authorizes, an error occurs, or the device code expires."""
     session = aiohttp_client.async_get_clientsession(hass)
     data = {
         "grant_type": "urn:ietf:params:oauth:grant-type:device_code",
@@ -101,7 +109,8 @@ async def _poll_token(
         "client_id": client_id,
         "code_verifier": code_verifier,
     }
-    while True:
+    deadline = time.monotonic() + max(interval, expires_in)
+    while time.monotonic() < deadline:
         async with session.post(
             BMW_TOKEN_URL,
             data=data,
@@ -119,6 +128,8 @@ async def _poll_token(
             await asyncio.sleep(interval)
             continue
         return None
+    _LOGGER.debug("BMW CarData: device code polling timed out after %ds", expires_in)
+    return None
 
 
 class BMWCarDataConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
@@ -131,6 +142,7 @@ class BMWCarDataConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         self._code_verifier: str | None = None
         self._verification_uri_complete: str | None = None
         self._interval: int = 5
+        self._expires_in: int = _DEVICE_CODE_DEFAULT_EXPIRY
         self._vin: str | None = None
         self._client_id: str | None = None
         self._gcid: str | None = None
@@ -248,6 +260,9 @@ class BMWCarDataConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                         + device_resp.get("user_code", "")
                     )
                     self._interval = int(device_resp.get("interval", 5))
+                    self._expires_in = int(
+                        device_resp.get("expires_in", _DEVICE_CODE_DEFAULT_EXPIRY)
+                    )
                     return await self.async_step_device_flow()
 
         return self.async_show_form(
@@ -281,6 +296,7 @@ class BMWCarDataConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 self._device_code,
                 self._code_verifier,
                 self._interval,
+                self._expires_in,
             )
             if not tokens:
                 return self.async_show_form(
@@ -296,7 +312,6 @@ class BMWCarDataConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             refresh_token = (tokens.get("refresh_token") or "").strip()
             access_token = (tokens.get("access_token") or "").strip()
             expires_in = int(tokens.get("expires_in", 3600))
-            import time
             token_expires = int(time.time()) + expires_in
 
             await self.async_set_unique_id(
@@ -336,6 +351,7 @@ class BMWCarDataOptionsFlowHandler(config_entries.OptionsFlow):
         self._code_verifier: str | None = None
         self._verification_uri_complete: str | None = None
         self._interval: int = 5
+        self._expires_in: int = _DEVICE_CODE_DEFAULT_EXPIRY
 
     async def async_step_init(
         self, user_input: dict[str, Any] | None = None
@@ -367,6 +383,9 @@ class BMWCarDataOptionsFlowHandler(config_entries.OptionsFlow):
                 + device_resp.get("user_code", "")
             )
             self._interval = int(device_resp.get("interval", 5))
+            self._expires_in = int(
+                device_resp.get("expires_in", _DEVICE_CODE_DEFAULT_EXPIRY)
+            )
             return await self.async_step_reauth_verify()
 
         return self.async_show_form(
@@ -391,6 +410,7 @@ class BMWCarDataOptionsFlowHandler(config_entries.OptionsFlow):
                 self._device_code,
                 self._code_verifier,
                 self._interval,
+                self._expires_in,
             )
             if not tokens:
                 return self.async_show_form(
@@ -402,7 +422,6 @@ class BMWCarDataOptionsFlowHandler(config_entries.OptionsFlow):
                     },
                 )
 
-            import time
             id_token = (tokens.get("id_token") or "").strip()
             refresh_token = (tokens.get("refresh_token") or "").strip()
             access_token = (tokens.get("access_token") or "").strip()

@@ -137,7 +137,7 @@ class BMWCarDataDeviceTracker(TrackerEntity):
                 if name := trans.get(key):
                     self._attr_name = name
         except Exception:
-            pass
+            _LOGGER.debug("Failed to load translated device tracker name", exc_info=True)
         self._update_position()
         self.async_on_remove(
             async_dispatcher_connect(
