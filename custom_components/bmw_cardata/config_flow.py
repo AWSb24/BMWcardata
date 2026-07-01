@@ -5,6 +5,7 @@ from __future__ import annotations
 import hashlib
 import base64
 import re
+import secrets
 import uuid
 from typing import Any
 
@@ -53,8 +54,8 @@ def _validate_vin(value: str) -> bool:
 
 
 def _pkce_code_verifier() -> str:
-    """Generate a PKCE code verifier (43-128 chars)."""
-    return base64.urlsafe_b64encode(bytes(96))[:64].decode("ascii").rstrip("=")
+    """Generate a cryptographically random PKCE code verifier (43-128 chars)."""
+    return secrets.token_urlsafe(64)
 
 
 def _pkce_code_challenge(verifier: str) -> str:
