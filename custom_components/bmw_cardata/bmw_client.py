@@ -18,6 +18,7 @@ import paho.mqtt.client as mqtt
 
 import logging
 
+from .api_client import iso_to_epoch
 from .const import (
     BMW_MQTT_HOST,
     BMW_MQTT_PORT,
@@ -200,13 +201,16 @@ class BMWCarDataClient:
         return self._connected
 
 
-def parse_cardata_message(vin: str, event_name: str, payload: dict) -> list[tuple[str, Any, str | None]]:
+def parse_cardata_message(
+    vin: str, event_name: str, payload: dict
+) -> list[tuple[str, Any, str | None, float | None]]:
     """
-    Parse BMW CarData JSON payload into (key, value, unit) tuples.
+    Parse BMW CarData JSON payload into (key, value, unit, timestamp) tuples.
     key is sanitized for entity id (e.g. vehicle_cabin_infotainment_...).
-    Expects payload.data to be a dict of { "vehicle.x.y.z": { "value": ..., "unit": ... } }.
+    timestamp is epoch seconds when the payload carries one, else None.
+    Expects payload.data to be a dict of { "vehicle.x.y.z": { "value": ..., "unit": ..., "timestamp": ... } }.
     """
-    result: list[tuple[str, Any, str | None]] = []
+    result: list[tuple[str, Any, str | None, float | None]] = []
     data = payload.get("data") or {}
     if not isinstance(data, dict):
         if _LOGGER.isEnabledFor(logging.DEBUG) and payload:
@@ -228,5 +232,5 @@ def parse_cardata_message(vin: str, event_name: str, payload: dict) -> list[tupl
         else:
             unit = None
         key = _sanitize_key(prop_name)
-        result.append((key, value, unit))
+        result.append((key, value, unit, iso_to_epoch(prop_obj.get("timestamp"))))
     return result

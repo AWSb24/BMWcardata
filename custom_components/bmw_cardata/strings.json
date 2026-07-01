@@ -29,6 +29,13 @@
         "title": "Complete BMW login",
         "description": "**Verification URL:**\n\n{verification_url}\n\nPlease open the link above in your browser and sign in with your BMW account. When you see \"Login successful\", return here and click **Submit**.",
         "data": {}
+      },
+      "mode": {
+        "title": "Data source",
+        "description": "Choose how vehicle data is retrieved:\n- **mqtt**: real-time MQTT stream (default)\n- **api**: periodic REST API polling (max. 50 calls/day)\n- **mixed**: MQTT for real-time plus API polling",
+        "data": {
+          "mode": "Mode"
+        }
       }
     }
   },
@@ -36,7 +43,10 @@
     "step": {
       "init": {
         "title": "Reauthenticate BMW CarData",
-        "description": "Reauthenticate your BMW account to refresh the connection. Click **Continue** to open a verification link in the next step."
+        "menu_options": {
+          "settings": "Change settings (API poll interval)",
+          "reauth": "Reauthenticate"
+        }
       },
       "reauth_verify": {
         "title": "Verify your BMW login",
@@ -45,6 +55,12 @@
       "reauth_success": {
         "title": "Reauthentication successful",
         "description": "Your BMW CarData connection has been updated. You can close this dialog."
+      },
+      "settings": {
+        "title": "API settings",
+        "data": {
+          "api_poll_interval": "API poll interval (minutes)"
+        }
       }
     },
     "abort": {

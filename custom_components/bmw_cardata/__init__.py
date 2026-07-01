@@ -22,6 +22,8 @@ from homeassistant.core import HomeAssistant, ServiceCall, callback
 from homeassistant.helpers import aiohttp_client
 from homeassistant.helpers.dispatcher import async_dispatcher_send
 
+from .api_client import BMWCarDataApiClient
+from .api_coordinator import CarDataApiCoordinator
 from .bmw_client import BMWCarDataClient, parse_cardata_message
 from .const import (
     DOMAIN,
@@ -29,9 +31,15 @@ from .const import (
     CONF_CLIENT_ID,
     CONF_GCID,
     CONF_VIN,
+    CONF_ACCESS_TOKEN,
     CONF_ID_TOKEN,
+    CONF_MODE,
     CONF_REFRESH_TOKEN,
     CONF_TOKEN_EXPIRES,
+    DEFAULT_MODE,
+    MODE_API,
+    MODE_MIXED,
+    MODE_MQTT,
     SIGNAL_CARDATA_UPDATE,
     SIGNAL_CONNECTION_CHANGED,
     SOFT_REFRESH_MARGIN_SECONDS,
@@ -120,11 +128,13 @@ async def _refresh_tokens(
             if result.get("error"):
                 return None
             id_token = (result.get("id_token") or "").strip()
+            access_token = (result.get("access_token") or "").strip()
             new_refresh = (result.get("refresh_token") or "").strip()
             expires_in = int(result.get("expires_in", 3600))
             token_expires = int(time.time()) + expires_in
             return {
                 "id_token": id_token,
+                "access_token": access_token,
                 "refresh_token": new_refresh or refresh_token,
                 "token_expires": token_expires,
             }
@@ -138,6 +148,8 @@ class CarDataStore:
 
     def __init__(self) -> None:
         self._data: dict[str, dict[str, tuple[Any, str | None]]] = {}
+        # Per-signal timestamp (epoch seconds) used for "newest wins" in mixed mode.
+        self._ts: dict[str, dict[str, float]] = {}
         self._lock = threading.Lock()
 
     def ensure_vin(self, vin: str) -> None:
@@ -146,11 +158,32 @@ class CarDataStore:
             if vin and vin not in self._data:
                 self._data[vin] = {}
 
-    def update(self, vin: str, key: str, value: Any, unit: str | None = None) -> None:
+    def update(
+        self,
+        vin: str,
+        key: str,
+        value: Any,
+        unit: str | None = None,
+        timestamp: float | None = None,
+    ) -> bool:
+        """Store a value for (vin, key).
+
+        If a timestamp is given and the existing value for the same key has a
+        newer timestamp, the update is ignored (mixed-mode "newest wins"). When
+        timestamps are absent the newest write always wins (legacy behavior).
+        Returns True if the value was applied.
+        """
         with self._lock:
-            if vin not in self._data:
-                self._data[vin] = {}
-            self._data[vin][key.lower()] = (value, unit)
+            key_lower = key.lower()
+            vin_data = self._data.setdefault(vin, {})
+            vin_ts = self._ts.setdefault(vin, {})
+            if timestamp is not None:
+                existing_ts = vin_ts.get(key_lower)
+                if existing_ts is not None and timestamp < existing_ts:
+                    return False
+                vin_ts[key_lower] = timestamp
+            vin_data[key_lower] = (value, unit)
+            return True
 
     def get(self, vin: str, key: str) -> tuple[Any, str | None] | None:
         with self._lock:
@@ -199,6 +232,9 @@ async def async_setup_entry(
     id_token = data[CONF_ID_TOKEN]
     refresh_token = data[CONF_REFRESH_TOKEN]
     token_expires = data.get(CONF_TOKEN_EXPIRES) or 0
+    mode = data.get(CONF_MODE, DEFAULT_MODE)
+    needs_mqtt = mode in (MODE_MQTT, MODE_MIXED)
+    needs_api = mode in (MODE_API, MODE_MIXED)
 
     store = CarDataStore()
     hass.data.setdefault(DOMAIN, {})[config_entry.entry_id] = {
@@ -246,11 +282,11 @@ async def async_setup_entry(
                         "CarData received: vin=%s event=%s keys=%s (entry=%s)",
                         vin[:8] + "..." if len(vin) > 8 else vin,
                         event_name,
-                        [k for k, _, _ in parsed],
+                        [k for k, *_ in parsed],
                         eid[:8] + "...",
                     )
-                for key, value, unit in parsed:
-                    store_e.update(vin, key, value, unit)
+                for key, value, unit, timestamp in parsed:
+                    store_e.update(vin, key, value, unit, timestamp)
                 hass.loop.call_soon_threadsafe(
                     lambda _eid=eid: async_dispatcher_send(
                         hass, SIGNAL_CARDATA_UPDATE, _eid, vin
@@ -278,14 +314,18 @@ async def async_setup_entry(
                     ed["client"] = c
             c.start()
 
-        client_thread = threading.Thread(target=run_client, daemon=True)
         gcid_registry[gcid_key] = {
             "client": None,
-            "thread": client_thread,
+            "thread": None,
             "entry_ids": {config_entry.entry_id},
         }
         entry_data["client"] = None  # set in run_client for all entries
-        client_thread.start()
+        # Start the shared MQTT client only when a mode needs it (MQTT/Mixed).
+        # The token refresh task below always runs (the REST API needs tokens too).
+        if needs_mqtt:
+            client_thread = threading.Thread(target=run_client, daemon=True)
+            gcid_registry[gcid_key]["thread"] = client_thread
+            client_thread.start()
 
         async def refresh_task_gcid() -> None:
             last_refresh = time.time()
@@ -320,15 +360,15 @@ async def async_setup_entry(
                 for eid in entry_ids:
                     ent = hass.config_entries.async_get_entry(eid)
                     if ent:
-                        hass.config_entries.async_update_entry(
-                            ent,
-                            data={
-                                **ent.data,
-                                CONF_ID_TOKEN: result["id_token"],
-                                CONF_REFRESH_TOKEN: result["refresh_token"],
-                                CONF_TOKEN_EXPIRES: result["token_expires"],
-                            },
-                        )
+                        new_data = {
+                            **ent.data,
+                            CONF_ID_TOKEN: result["id_token"],
+                            CONF_REFRESH_TOKEN: result["refresh_token"],
+                            CONF_TOKEN_EXPIRES: result["token_expires"],
+                        }
+                        if result.get("access_token"):
+                            new_data[CONF_ACCESS_TOKEN] = result["access_token"]
+                        hass.config_entries.async_update_entry(ent, data=new_data)
                 reg = gcid_registry.get(gcid_key, {})
                 if reg.get("client"):
                     reg["client"].update_tokens(result["id_token"])
@@ -341,6 +381,24 @@ async def async_setup_entry(
         # Another entry with same GCID: reuse the shared client
         gcid_registry[gcid_key]["entry_ids"].add(config_entry.entry_id)
         entry_data["client"] = gcid_registry[gcid_key].get("client")
+
+    # REST API polling (API / Mixed modes) writes into the same store as MQTT.
+    if needs_api:
+        api_client = BMWCarDataApiClient(
+            aiohttp_client.async_get_clientsession(hass),
+            token_provider=lambda: (config_entry.data.get(CONF_ACCESS_TOKEN) or ""),
+        )
+        coordinator = CarDataApiCoordinator(hass, config_entry, entry_data, api_client)
+        entry_data["api_coordinator"] = coordinator
+        # A DataUpdateCoordinator only schedules periodic refreshes while it has
+        # listeners; our entities update via the dispatcher, so keep it alive
+        # with a no-op listener that we release on unload.
+        entry_data["api_unsub"] = coordinator.async_add_listener(lambda: None)
+        # Do the first poll in the background so a slow/failed API call (or the
+        # 50/24h rate limit) does not block or fail entry setup.
+        config_entry.async_create_background_task(
+            hass, coordinator.async_refresh(), f"bmw_cardata_api_first_poll_{config_entry.entry_id[:8]}"
+        )
 
     await hass.config_entries.async_forward_entry_setups(
         config_entry, ["sensor", "binary_sensor", "device_tracker"]
@@ -358,6 +416,11 @@ async def async_unload_entry(
     await hass.config_entries.async_unload_platforms(
         config_entry, ["sensor", "binary_sensor", "device_tracker"]
     )
+    entry_data = (hass.data.get(DOMAIN) or {}).get(config_entry.entry_id)
+    if entry_data:
+        api_unsub = entry_data.get("api_unsub")
+        if api_unsub:
+            api_unsub()
     if config_entry.entry_id in (hass.data.get(DOMAIN) or {}):
         del hass.data[DOMAIN][config_entry.entry_id]
     if gcid in gcid_registry:
