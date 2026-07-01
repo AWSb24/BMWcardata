@@ -93,8 +93,10 @@ class CarDataApiCoordinator(DataUpdateCoordinator[int]):
             raise UpdateFailed("No access token available for CarData API")
 
         try:
-            await self._ensure_container()
-            rows = await self._client.get_telematic_data(vin)
+            container_id = await self._ensure_container()
+            if not container_id:
+                raise UpdateFailed("Could not create/find a CarData API container")
+            rows = await self._client.get_telematic_data(vin, container_id)
         except RateLimitError:
             # 50/24h exhausted - keep last values, try again next interval.
             _LOGGER.warning(

@@ -42,7 +42,23 @@ def test_iso_to_epoch(value, expected) -> None:
     assert iso_to_epoch(value) == expected
 
 
-def test_parse_telematic_response_list_and_wrapped() -> None:
+def test_parse_telematic_response_map_form() -> None:
+    # Actual API shape: telematicData is a map keyed by descriptor.
+    payload = {
+        "telematicData": {
+            "vehicle.cabin.x.longitude": {
+                "value": "9.49",
+                "unit": "degrees",
+                "timestamp": "2025-07-28T05:16:53.000Z",
+            }
+        }
+    }
+    assert parse_telematic_response(payload) == [
+        ("vehicle_cabin_x_longitude", "9.49", "degrees", 1753679813.0)
+    ]
+
+
+def test_parse_telematic_response_list_fallback() -> None:
     item = {
         "name": "vehicle.cabin.x.longitude",
         "value": "9.49",
@@ -50,9 +66,7 @@ def test_parse_telematic_response_list_and_wrapped() -> None:
         "timestamp": "2025-07-28T05:16:53.000Z",
     }
     expected = [("vehicle_cabin_x_longitude", "9.49", "degrees", 1753679813.0)]
-    # Bare list and object-wrapped list are both accepted.
     assert parse_telematic_response([item]) == expected
-    assert parse_telematic_response({"telematicData": [item]}) == expected
 
 
 def test_parse_telematic_skips_items_without_name() -> None:

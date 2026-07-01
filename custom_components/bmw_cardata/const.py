@@ -8,7 +8,9 @@ BMW_TOKEN_URL = "https://customer.bmwgroup.com/gcdm/oauth/token"
 BMW_SCOPES = "authenticate_user openid cardata:streaming:read"
 
 # BMW CarData REST API
-BMW_API_BASE = "https://customer.bmwgroup.com"
+BMW_API_BASE = "https://api-cardata.bmwgroup.com"
+# Mandatory API version header (all CarData API requests require x-version: v1).
+BMW_API_VERSION = "v1"
 # Scope needed for the REST API in addition to streaming.
 BMW_SCOPE_API = "cardata:api:read"
 BMW_SCOPE_STREAMING = "cardata:streaming:read"

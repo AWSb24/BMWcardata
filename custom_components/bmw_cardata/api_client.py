@@ -15,7 +15,7 @@ from typing import Any, Callable
 
 from aiohttp import ClientSession
 
-from .const import BMW_API_BASE
+from .const import BMW_API_BASE, BMW_API_VERSION
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -53,45 +53,54 @@ def iso_to_epoch(timestamp: str | None) -> float | None:
         return None
 
 
+def _clean_unit(unit: Any) -> str | None:
+    if isinstance(unit, str):
+        return unit.strip() or None
+    return None
+
+
 def parse_telematic_response(payload: Any) -> list[tuple[str, Any, str | None, float | None]]:
     """Normalize a telematic-data response into (key, value, unit, timestamp) tuples.
 
-    Accepts either a bare list of items or an object wrapping the list under a
-    common field name. Each item is {name, value, unit, timestamp}.
+    The API returns ``{"telematicData": {"<descriptor>": {"value", "unit",
+    "timestamp"}}}`` (a map keyed by descriptor). A bare list of ``{name, ...}``
+    items is also accepted defensively.
     """
-    items: list[Any]
-    if isinstance(payload, list):
-        items = payload
-    elif isinstance(payload, dict):
-        for field in ("telematicData", "data", "items", "values"):
-            if isinstance(payload.get(field), list):
-                items = payload[field]
-                break
-        else:
-            items = []
-    else:
-        items = []
-
     result: list[tuple[str, Any, str | None, float | None]] = []
-    for item in items:
-        if not isinstance(item, dict):
-            continue
-        name = item.get("name")
-        if not name:
-            continue
-        unit = item.get("unit")
-        if isinstance(unit, str):
-            unit = unit.strip() or None
-        else:
-            unit = None
-        result.append(
-            (
-                descriptor_to_key(name),
-                item.get("value"),
-                unit,
-                iso_to_epoch(item.get("timestamp")),
+
+    container = payload
+    if isinstance(payload, dict) and isinstance(payload.get("telematicData"), (dict, list)):
+        container = payload["telematicData"]
+
+    if isinstance(container, dict):
+        # Map form: key is the descriptor, value carries value/unit/timestamp.
+        for name, obj in container.items():
+            if not isinstance(obj, dict):
+                continue
+            result.append(
+                (
+                    descriptor_to_key(name),
+                    obj.get("value"),
+                    _clean_unit(obj.get("unit")),
+                    iso_to_epoch(obj.get("timestamp")),
+                )
             )
-        )
+    elif isinstance(container, list):
+        # List form: each item carries its own name.
+        for item in container:
+            if not isinstance(item, dict):
+                continue
+            name = item.get("name")
+            if not name:
+                continue
+            result.append(
+                (
+                    descriptor_to_key(name),
+                    item.get("value"),
+                    _clean_unit(item.get("unit")),
+                    iso_to_epoch(item.get("timestamp")),
+                )
+            )
     return result
 
 
@@ -111,18 +120,23 @@ class BMWCarDataApiClient:
         self._token_provider = token_provider
 
     async def _request(
-        self, method: str, path: str, json_body: dict | None = None
+        self,
+        method: str,
+        path: str,
+        json_body: dict | None = None,
+        params: dict | None = None,
     ) -> Any:
         token = (self._token_provider() or "").strip()
         headers = {
             "Authorization": f"Bearer {token}",
             "Accept": "application/json",
+            "x-version": BMW_API_VERSION,
         }
         if json_body is not None:
             headers["Content-Type"] = "application/json"
         url = f"{BMW_API_BASE}{path}"
         async with self._session.request(
-            method, url, headers=headers, json=json_body
+            method, url, headers=headers, json=json_body, params=params
         ) as resp:
             text = await resp.text()
             if resp.status == 429 or "CU-429" in text:
@@ -149,7 +163,7 @@ class BMWCarDataApiClient:
 
     async def list_containers(self) -> Any:
         """Return all containers for the user."""
-        return await self._request("GET", "/customers/containers/")
+        return await self._request("GET", "/customers/containers")
 
     async def create_container(
         self,
@@ -157,13 +171,13 @@ class BMWCarDataApiClient:
         name: str = "Home Assistant",
         purpose: str = "Home Assistant CarData integration",
     ) -> str | None:
-        """Create a container declaring the given technicalDescriptors; return its id."""
+        """Create a container declaring the given technicalDescriptors; return its containerId."""
         body = {
             "name": name,
             "purpose": purpose,
             "technicalDescriptors": descriptors,
         }
-        resp = await self._request("POST", "/customers/containers/", json_body=body)
+        resp = await self._request("POST", "/customers/containers", json_body=body)
         if isinstance(resp, dict):
             return resp.get("containerId") or resp.get("id")
         return None
@@ -173,8 +187,12 @@ class BMWCarDataApiClient:
         await self._request("DELETE", f"/customers/containers/{container_id}")
 
     async def get_telematic_data(
-        self, vin: str
+        self, vin: str, container_id: str
     ) -> list[tuple[str, Any, str | None, float | None]]:
-        """Return telematic values (key, value, unit, timestamp) for the active container."""
-        resp = await self._request("GET", f"/customers/vehicles/{vin}/telematicData")
+        """Return telematic values (key, value, unit, timestamp) for the given container."""
+        resp = await self._request(
+            "GET",
+            f"/customers/vehicles/{vin}/telematicData",
+            params={"containerId": container_id},
+        )
         return parse_telematic_response(resp)
